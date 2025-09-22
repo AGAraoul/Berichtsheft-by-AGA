@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Berichtsheft, in Sekunden.</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+    <style>
+        /* THEME VARIABLES */
+        :root {
+            --bg-color: #f0f4f8;
+            --card-bg-color: rgba(255, 255, 255, 0.6);
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --border-color: rgba(203, 213, 225, 0.5);
+            --accent-color: #16a34a; /* Green-600 */
+            --accent-hover: #15803d; /* Green-700 */
+            --error-color: #ef4444;
+            --error-bg-color: rgba(239, 68, 68, 0.1);
+            --aurora-1: #22c55e; /* Green-500 */
+            --aurora-2: #84cc16; /* Lime-500 */
+            --aurora-3: #4ade80; /* Green-400 */
+            --shadow-color: rgba(30, 41, 59, 0.1);
+            --icon-color: #64748b;
+        }
+
+        .dark-mode {
+            --bg-color: #0d1117;
+            --card-bg-color: rgba(22, 27, 34, 0.5);
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --border-color: rgba(55, 65, 81, 0.5);
+            --accent-color: #22c55e; /* Green-500 */
+            --accent-hover: #4ade80; /* Green-400 */
+            --error-color: #f87171;
+            --error-bg-color: rgba(248, 113, 113, 0.1);
+            --aurora-1: #16a34a; /* Green-600 */
+            --aurora-2: #15803d; /* Green-700 */
+            --aurora-3: #84cc16; /* Lime-500 */
+            --shadow-color: rgba(0, 0, 0, 0.2);
+            --icon-color: #94a3b8;
+        }
+        
+        /* BASE & FONTS */
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.5s ease, color 0.5s ease;
+            overflow: hidden;
+        }
+        h1, h2, h3, .font-display {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* AURORA BACKGROUND */
+        .aurora-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            filter: blur(100px);
+        }
+        .aurora-shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: moveAurora 25s infinite alternate ease-in-out;
+        }
+        .aurora-1 { background-color: var(--aurora-1); width: 400px; height: 400px; top: 10%; left: 10%; animation-duration: 20s; }
+        .aurora-2 { background-color: var(--aurora-2); width: 500px; height: 500px; top: 50%; left: 60%; animation-duration: 25s; }
+        .aurora-3 { background-color: var(--aurora-3); width: 350px; height: 350px; top: 80%; left: 20%; animation-duration: 30s; }
+
+        @keyframes moveAurora {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(100px, 50px) scale(1.2); }
+            100% { transform: translate(-50px, -100px) scale(1); }
+        }
+
+        /* CARD & LAYOUT */
+        .glass-card {
+            background-color: var(--card-bg-color);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 8px 32px 0 var(--shadow-color);
+            transition: background-color 0.5s ease, border-color 0.5s ease;
+        }
+        
+        /* TRANSITIONS FOR STEPS */
+        .step {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out, visibility 0s 0.5s;
+        }
+        .step.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+        
+        /* CUSTOM COMPONENTS */
+        .gender-btn {
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        .gender-btn:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-4px);
+        }
+        .gender-btn.active {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+        }
+        .gender-btn.active .icon {
+            color: white !important;
+        }
+
+        .main-btn {
+            background-color: var(--accent-color);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px -2px rgba(0,0,0,0.1);
+        }
+        .main-btn:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px -2px rgba(0,0,0,0.15);
+        }
+        .main-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .secondary-btn {
+             background-color: transparent;
+             color: var(--text-secondary);
+             transition: all 0.3s ease;
+        }
+        .secondary-btn:hover {
+            color: var(--text-primary);
+        }
+
+        textarea {
+            background-color: rgba(0,0,0,0.1);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px var(--accent-color);
+            background-color: transparent;
+        }
+        
+        /* LOADER ANIMATION */
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 5px solid var(--border-color);
+            border-bottom-color: var(--accent-color);
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+        }
+        @keyframes rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* RESULT CARD ANIMATION */
+        .result-card {
+            opacity: 0;
+            transform: scale(0.95);
+            animation: popIn 0.5s ease-out forwards;
+        }
+        @keyframes popIn { 
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .copy-btn {
+            background-color: var(--card-bg-color);
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+        }
+         .copy-btn:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+        }
+        .copy-btn.copied {
+            background-color: #10b981;
+            border-color: #10b981;
+            color: white;
+        }
+
+        /* Error Message */
+        .error-message {
+            background-color: var(--error-bg-color);
+            color: var(--error-color);
+            transition: all 0.3s ease;
+        }
+
+        /* Custom Scrollbar */
+        #day-inputs-grid::-webkit-scrollbar,
+        #report-output::-webkit-scrollbar {
+            width: 10px;
+        }
+        #day-inputs-grid::-webkit-scrollbar-track,
+        #report-output::-webkit-scrollbar-track {
+            background: transparent;
+            margin-block: 5px;
+        }
+        #day-inputs-grid::-webkit-scrollbar-thumb,
+        #report-output::-webkit-scrollbar-thumb {
+            background-color: var(--accent-color);
+            border-radius: 10px;
+            border: 2px solid var(--bg-color);
+        }
+        #day-inputs-grid::-webkit-scrollbar-thumb:hover,
+        #report-output::-webkit-scrollbar-thumb:hover {
+            background-color: var(--accent-hover);
+        }
+
+        /* Shimmer Animation for H1 */
+        .shimmer-h1 {
+            background: linear-gradient(
+                90deg,
+                var(--text-primary) 25%,
+                #ffffff 50%,
+                var(--text-primary) 75%
+            );
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: shimmer-text 4s linear infinite;
+            animation-delay: 2s;
+        }
+
+        .dark-mode .shimmer-h1 {
+             background: linear-gradient(
+                90deg,
+                var(--text-secondary) 25%,
+                #ffffff 50%,
+                var(--text-secondary) 75%
+            );
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        @keyframes shimmer-text {
+            to {
+                background-position: -200% center;
+            }
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+    <!-- Background Effect -->
+    <div class="aurora-container">
+        <div class="aurora-shape aurora-1"></div>
+        <div class="aurora-shape aurora-2"></div>
+        <div class="aurora-shape aurora-3"></div>
+    </div>
+
+    <!-- Header with Logo and Theme Toggle -->
+    <header class="fixed top-4 right-4 z-50 flex items-center gap-4">
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="glass-card h-12 w-12 flex items-center justify-center rounded-full focus:outline-none">
+            <svg id="theme-icon-sun" class="h-6 w-6" style="color: var(--icon-color);" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+            <svg id="theme-icon-moon" class="h-6 w-6 hidden" style="color: var(--icon-color);" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+        </button>
+        <!-- Schaeffler Logo -->
+        <div class="flex items-center justify-center h-12 w-auto p-2">
+            <!-- Replace with correct path to your logo if needed -->
+            <img src="schaeffler-logo.svg" alt="Schaeffler Logo" class="h-8">
+        </div>
+    </header>
+    
+    <!-- Main Container -->
+    <main id="app-container" class="w-full max-w-4xl h-[700px] relative">
+        
+        <!-- Step 1: Gender Selection -->
+        <section id="step-1" class="step active flex flex-col justify-center items-center text-center p-8">
+            <div class="glass-card rounded-2xl w-full p-8 md:p-12">
+                <h1 class="font-display text-4xl md:text-5xl font-bold mb-3 shimmer-h1">Berichtsheft by AGA</h1>
+                <p class="text-lg mb-8" style="color: var(--text-secondary);">Erstelle professionelle Ausbildungsberichte in Rekordzeit.</p>
+                <div class="w-full">
+                    <h3 class="text-lg font-semibold mb-6">Für wen wird der Bericht erstellt?</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <button id="btn-male" class="gender-btn p-6 rounded-xl flex flex-col items-center gap-3">
+                           <i data-lucide="user" class="icon" style="color: var(--icon-color);"></i>
+                            <span class="font-semibold text-lg">Männlich</span>
+                        </button>
+                        <button id="btn-female" class="gender-btn p-6 rounded-xl flex flex-col items-center gap-3">
+                            <i data-lucide="user" class="icon" style="color: var(--icon-color);"></i>
+                            <span class="font-semibold text-lg">Weiblich</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 2: Inputs -->
+        <section id="step-2" class="step">
+            <div class="glass-card rounded-2xl w-full h-full p-8 flex flex-col">
+                 <header class="text-center mb-6">
+                    <h2 class="font-display text-3xl font-bold">Wochenübersicht</h2>
+                    <p class="text-md" style="color: var(--text-secondary);">Geben Sie Ihre wöchentlichen Aktivitäten ein.</p>
+                </header>
+                
+                <div id="day-inputs-grid" class="flex-grow grid gap-y-4 overflow-y-auto p-2 pr-4">
+                    <!-- Day cards will be injected by JS -->
+                </div>
+
+                <div id="error-container" class="h-10 mt-2 text-center"></div>
+                
+                <div class="flex justify-between items-center mt-2">
+                    <button id="back-to-gender-btn" class="secondary-btn font-semibold py-3 px-5 rounded-lg flex items-center gap-2">
+                       <i data-lucide="arrow-left" style="width:20px; height: 20px;"></i> Zurück
+                    </button>
+                    <button id="generate-btn" class="main-btn text-white font-bold py-3 px-5 rounded-lg flex items-center gap-2">
+                       <i data-lucide="sparkles" style="width:20px; height: 20px;"></i> Bericht erstellen
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 3: Loading -->
+        <section id="step-3" class="step">
+            <div class="glass-card rounded-2xl w-full h-full p-8 flex flex-col justify-center items-center text-center">
+                <span class="loader mb-8"></span>
+                <h2 class="font-display text-3xl font-bold mb-2">Magie passiert...</h2>
+                <p id="loading-status" class="text-lg" style="color: var(--text-secondary);">Analysiere Eingaben</p>
+            </div>
+        </section>
+
+        <!-- Step 4: Results -->
+        <section id="step-4" class="step">
+            <div class="glass-card rounded-2xl w-full h-full p-8 flex flex-col">
+                <header class="text-center mb-6">
+                    <h2 class="font-display text-3xl font-bold">Dein Wochenbericht</h2>
+                    <p class="text-md" style="color: var(--text-secondary);">Hier sind die formulierten Einträge für dein Berichtsheft.</p>
+                </header>
+                <div id="report-output" class="flex-grow space-y-4 overflow-y-auto pr-4">
+                    <!-- Results will be injected here -->
+                </div>
+                <div class="text-center mt-6">
+                    <button id="reset-btn" class="main-btn text-white font-bold py-3 px-6 rounded-full flex items-center gap-2 mx-auto">
+                        <i data-lucide="rotate-cw" style="width:20px; height: 20px;"></i> Neuen Bericht erstellen
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+
+            // --- STATE MANAGEMENT ---
+            const state = {
+                currentStep: 1,
+                selectedGender: null,
+                days: ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag'],
+            };
+
+            // --- DOM ELEMENTS ---
+            const steps = document.querySelectorAll('.step');
+            const maleBtn = document.getElementById('btn-male');
+            const femaleBtn = document.getElementById('btn-female');
+            const dayInputsGrid = document.getElementById('day-inputs-grid');
+            const backToGenderBtn = document.getElementById('back-to-gender-btn');
+            const generateBtn = document.getElementById('generate-btn');
+            const loadingStatus = document.getElementById('loading-status');
+            const reportOutput = document.getElementById('report-output');
+            const resetBtn = document.getElementById('reset-btn');
+            const errorContainer = document.getElementById('error-container');
+
+            // --- FUNCTIONS ---
+            const showError = (message) => {
+                errorContainer.innerHTML = `<div class="error-message p-2 rounded-md font-semibold">${message}</div>`;
+                setTimeout(() => {
+                    errorContainer.innerHTML = '';
+                }, 3000);
+            };
+
+            const createDayInputCards = () => {
+                if (dayInputsGrid.children.length > 0) return; 
+
+                dayInputsGrid.classList.remove('sm:grid-cols-2', 'lg:grid-cols-3');
+                dayInputsGrid.classList.add('grid-cols-1');
+
+                state.days.forEach((day, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'flex flex-col';
+                    card.innerHTML = `
+                        <label for="day-input-${index}" class="font-semibold mb-2 text-left">${day}</label>
+                        <textarea id="day-input-${index}" rows="4" class="w-full flex-grow rounded-lg p-2 text-base resize-none" placeholder="Stichpunkte..."></textarea>
+                    `;
+                    dayInputsGrid.appendChild(card);
+                });
+            };
+
+
+            const navigateToStep = (stepNumber) => {
+                if (stepNumber === 2) {
+                    createDayInputCards();
+                }
+                state.currentStep = stepNumber;
+                steps.forEach((step, index) => {
+                    step.classList.toggle('active', index + 1 === stepNumber);
+                });
+            };
+
+            const handleGenerate = async () => {
+                const inputs = Array.from(document.querySelectorAll('#day-inputs-grid textarea')).map(textarea => textarea.value.trim());
+                if (inputs.every(input => input === '')) {
+                     showError('Bitte geben Sie für mindestens einen Tag eine Tätigkeit ein.'); 
+                     return;
+                }
+                
+                navigateToStep(3);
+                
+                try {
+                    const generatedReports = await callGeminiApi(inputs, state.selectedGender);
+                    displayResults(generatedReports);
+                    navigateToStep(4);
+                } catch (error) {
+                    console.error("API call failed:", error);
+                    showError(`Fehler: ${error.message}`);
+                    navigateToStep(2);
+                }
+            };
+            
+            const displayResults = (reports) => {
+                reportOutput.innerHTML = '';
+                reports.forEach((report, index) => {
+                    if (report.text) {
+                        const card = document.createElement('div');
+                        card.className = 'result-card glass-card relative p-5 pr-28 rounded-lg';
+                        card.style.animationDelay = `${index * 100}ms`;
+                        const sanitizedText = report.text.replace(/"/g, '&quot;');
+                        
+                        card.innerHTML = `
+                            <h3 class="font-display text-xl font-bold mb-2 text-[var(--accent-color)]">${report.day}</h3>
+                            <p class="leading-relaxed" style="color: var(--text-secondary);">${report.text}</p>
+                            <button class="copy-btn absolute top-4 right-4 text-sm font-semibold py-2 px-3 rounded-md flex items-center gap-1.5" data-copytext="${sanitizedText}">
+                               <i data-lucide="copy" style="width:16px; height: 16px;"></i> <span class="copy-text">Kopieren</span>
+                            </button>
+                        `;
+                        reportOutput.appendChild(card);
+                    }
+                });
+                lucide.createIcons();
+            };
+
+            const resetApp = () => {
+                state.selectedGender = null;
+                maleBtn.classList.remove('active');
+                femaleBtn.classList.remove('active');
+                const textareas = document.querySelectorAll('#day-inputs-grid textarea');
+                if (textareas) {
+                    textareas.forEach(ta => ta.value = '');
+                }
+                navigateToStep(1);
+            };
+
+            // --- EVENT LISTENERS ---
+            maleBtn.addEventListener('click', () => {
+                state.selectedGender = 'male';
+                maleBtn.classList.add('active');
+                femaleBtn.classList.remove('active');
+                setTimeout(() => navigateToStep(2), 300);
+            });
+
+            femaleBtn.addEventListener('click', () => {
+                state.selectedGender = 'female';
+                femaleBtn.classList.add('active');
+                maleBtn.classList.remove('active');
+                setTimeout(() => navigateToStep(2), 300);
+            });
+            
+            backToGenderBtn.addEventListener('click', () => navigateToStep(1));
+
+            generateBtn.addEventListener('click', handleGenerate);
+            resetBtn.addEventListener('click', resetApp);
+            
+            reportOutput.addEventListener('click', (e) => {
+                const button = e.target.closest('.copy-btn');
+                if (button) {
+                    const textToCopy = button.dataset.copytext;
+                    // Use modern clipboard API with fallback
+                    if (navigator.clipboard && window.isSecureContext) {
+                        navigator.clipboard.writeText(textToCopy).then(() => {
+                           updateCopyButton(button);
+                        }).catch(err => {
+                            console.error('Modern copy failed:', err);
+                            fallbackCopyText(textToCopy, button);
+                        });
+                    } else {
+                        fallbackCopyText(textToCopy, button);
+                    }
+                }
+            });
+
+            const updateCopyButton = (button) => {
+                const textSpan = button.querySelector('.copy-text');
+                if(textSpan) textSpan.textContent = 'Kopiert!';
+                button.classList.add('copied');
+                setTimeout(() => {
+                    if(textSpan) textSpan.textContent = 'Kopieren';
+                    button.classList.remove('copied');
+                }, 2000);
+            }
+
+            const fallbackCopyText = (text, button) => {
+                 const textArea = document.createElement("textarea");
+                 textArea.value = text;
+                 textArea.style.position = "fixed";
+                 textArea.style.left = "-9999px";
+                 document.body.appendChild(textArea);
+                 textArea.focus();
+                 textArea.select();
+                 try {
+                     document.execCommand('copy');
+                     updateCopyButton(button);
+                 } catch (err) {
+                     console.error('Fallback copy failed', err);
+                 }
+                 document.body.removeChild(textArea);
+            };
+
+
+            // --- THEME TOGGLE ---
+            const themeToggle = document.getElementById('theme-toggle');
+            const sunIcon = document.getElementById('theme-icon-sun');
+            const moonIcon = document.getElementById('theme-icon-moon');
+            const currentTheme = localStorage.getItem('theme');
+
+            if (currentTheme === 'dark') {
+                document.documentElement.classList.add('dark-mode');
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            }
+
+            themeToggle.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark-mode');
+                sunIcon.classList.toggle('hidden');
+                moonIcon.classList.toggle('hidden');
+                let theme = document.documentElement.classList.contains('dark-mode') ? 'dark' : 'light';
+                localStorage.setItem('theme', theme);
+            });
+
+            // --- API CALL LOGIC (NEU & SICHER) ---
+            async function callGeminiApi(inputs, gender) {
+                // The API call now points to our own secure function instead of directly to Google.
+                const functionUrl = '/.netlify/functions/generate';
+
+                const loadingMessages = inputs.map((inp, i) => inp ? `Formuliere ${state.days[i]}...` : null).filter(Boolean);
+                loadingMessages.push("Finalisiere Bericht...");
+                let messageIndex = 0;
+                
+                const updateLoadingText = () => {
+                    if(messageIndex < loadingMessages.length) {
+                        loadingStatus.textContent = loadingMessages[messageIndex];
+                        messageIndex++;
+                    }
+                };
+                updateLoadingText();
+                const loadingInterval = setInterval(updateLoadingText, 2000);
+                
+                try {
+                    // We send all inputs to our backend at once.
+                    const response = await fetch(functionUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            inputs: inputs, 
+                            gender: gender,
+                            days: state.days // Send the days along so the backend has them
+                        })
+                    });
+
+                    clearInterval(loadingInterval);
+
+                    if (!response.ok) {
+                        const errorResult = await response.json();
+                        throw new Error(errorResult.error || 'An unknown error occurred.');
+                    }
+
+                    const results = await response.json();
+                    return results;
+
+                } catch (error) {
+                    clearInterval(loadingInterval);
+                    console.error("Error calling the Netlify Function:", error);
+                    // Re-throw the error to be caught by the handleGenerate function
+                    throw error;
+                }
+            }
+
+            // --- INITIALIZATION ---
+            navigateToStep(1);
+        });
+    </script>
+</body>
+</html>

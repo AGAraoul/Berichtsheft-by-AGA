@@ -1,0 +1,8 @@
+{
+  "name": "berichtsheft-generator",
+  "version": "1.0.0",
+  "description": "Netlify function to securely call Gemini API",
+  "dependencies": {
+    "node-fetch": "^3.0"
+  }
+}
