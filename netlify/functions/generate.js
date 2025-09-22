@@ -17,7 +17,7 @@ exports.handler = async (event) => {
             throw new Error("API key is not set in environment variables.");
         }
 
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-latest:generateContent?key=${apiKey}`;
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`;
 
         // Die Logik zur Erstellung der Prompts und der parallelen API-Aufrufe
         // wird vom Frontend ins sichere Backend verschoben.
