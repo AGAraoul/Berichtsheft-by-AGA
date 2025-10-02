@@ -302,34 +302,25 @@
         
         <!-- Step 1: Gender Selection -->
 <!-- Step 1: Gender Selection -->
-<section id="step-1" class="step active flex flex-col justify-center items-center text-center p-8">
-    <div class="glass-card rounded-2xl w-full p-8 md:p-12">
-        <h1 class="font-display text-4xl md:text-5xl font-bold mb-3 shimmer-h1">Berichtsheft by AGA</h1>
-        <p class="text-lg mb-8" style="color: var(--text-secondary);">Erstelle professionelle Ausbildungsberichte in Rekordzeit.</p>
-        <div class="w-full">
-            <h3 class="text-lg font-semibold mb-6">Für wen wird der Bericht erstellt?</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <button id="btn-male" class="gender-btn p-6 rounded-xl flex flex-col items-center gap-3">
-                    <!-- NEUES, MODERNES ICON FÜR MÄNNLICH -->
-                    <svg class="icon" style="color: var(--icon-color);" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="8" r="4"/>
-                        <path d="M19.33 20.33C18.42 18.23 16.2 17 12 17s-6.42 1.23-7.33 3.33"/>
-                    </svg>
-                    <span class="font-semibold text-lg">Männlich</span>
-                </button>
-                <button id="btn-female" class="gender-btn p-6 rounded-xl flex flex-col items-center gap-3">
-                    <!-- NEUES, MODERNES ICON FÜR WEIBLICH -->
-                    <svg class="icon" style="color: var(--icon-color);" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="8" r="3.5" />
-                        <path d="M6,21 C6,17.1340068 8.6862915,14 12,14 C15.3137085,14 18,17.1340068 18,21" />
-                        <path d="M15.5,8 C15.5,5.5 13.5,4 12,4 C10.5,4 9.5,5 9.5,7 C9.5,10 12.5,12 12.5,15" />
-                    </svg>
-                    <span class="font-semibold text-lg">Weiblich</span>
-                </button>
+        <section id="step-1" class="step active flex flex-col justify-center items-center text-center p-8">
+            <div class="glass-card rounded-2xl w-full p-8 md:p-12">
+                <h1 class="font-display text-4xl md:text-5xl font-bold mb-3 shimmer-h1">Berichtsheft by AGA</h1>
+                <p class="text-lg mb-8" style="color: var(--text-secondary);">Erstelle professionelle Ausbildungsberichte in Rekordzeit.</p>
+                <div class="w-full">
+                    <h3 class="text-lg font-semibold mb-6">Für wen wird der Bericht erstellt?</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <button id="btn-male" class="gender-btn p-6 rounded-xl flex flex-col items-center gap-3">
+                            <img src="mann.png" alt="Männlich" class="h-20 w-20 object-cover rounded-full mb-2">
+                            <span class="font-semibold text-lg">Männlich</span>
+                        </button>
+                        <button id="btn-female" class="gender-btn p-6 rounded-xl flex flex-col items-center gap-3">
+                            <img src="frau.png" alt="Weiblich" class="h-20 w-20 object-cover rounded-full mb-2">
+                            <span class="font-semibold text-lg">Weiblich</span>
+                        </button>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-</section>
+        </section>
 
         <!-- Step 2: Inputs -->
         <section id="step-2" class="step">
