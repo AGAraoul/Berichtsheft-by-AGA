@@ -137,6 +137,7 @@
 
         .main-btn {
             background-color: var(--accent-color);
+            color: white;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px -2px rgba(0,0,0,0.1);
         }
@@ -606,7 +607,7 @@
                 </div>
 
                 <div><label for="email-feedback" class="block text-sm font-medium">E-Mail (optional)</label><input type="email" name="Kontakt-Email" id="email-feedback" class="mt-1 w-full px-3 py-2 border border-gray-300 dark:border-slate-600 bg-transparent dark:bg-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="you@example.com"></div>
-                <div class="pt-2"><button type="submit" class="w-full main-btn flex items-center justify-center py-2.5 px-5 text-sm font-medium text-white rounded-lg transition-all">Feedback senden</button></div>
+                <div class="pt-2"><button type="submit" class="w-full main-btn flex items-center justify-center py-2.5 px-5 text-sm font-semibold text-white rounded-lg transition-all">Feedback senden</button></div>
             </form>
         </div>
         <div id="view-bug-form" class="p-6 hidden">
@@ -614,7 +615,10 @@
             <h2 class="font-display text-xl font-semibold text-center mb-4 mt-2">Bug melden</h2>
             <form id="bug-form" action="https://formspree.io/f/IHR_CODE" method="POST" class="space-y-4" enctype="multipart/form-data">
                 <div><label for="bug-summary" class="block text-sm font-medium">Zusammenfassung</label><input type="text" name="Bug-Zusammenfassung" id="bug-summary" class="mt-1 w-full px-3 py-2 border border-gray-300 dark:border-slate-600 bg-transparent dark:bg-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="z.B. Button funktioniert nicht"></div>
-                <div><label class="block text-sm font-medium">Schritte zur Reproduktion</label><textarea name="Schritte-zur-Reproduktion" class="w-full h-28 p-3 border border-gray-300 dark:border-slate-600 bg-transparent dark:bg-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 resize-none" placeholder="Bitte beschreibe den Fehler..."></textarea></div>
+                <div>
+                    <label class="block text-sm font-medium">Schritte zur Reproduktion</label>
+                    <textarea name="Schritte-zur-Reproduktion" class="w-full h-28 p-3 border border-gray-300 dark:border-slate-600 bg-transparent dark:bg-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500 resize-none" placeholder="Bitte beschreibe den Fehler..."></textarea>
+                </div>
                 
                  <!-- Screenshot Upload Area -->
                 <div class="bug-file-upload-area">
@@ -630,7 +634,7 @@
                 </div>
 
                 <div><label for="email-bug" class="block text-sm font-medium">E-Mail (optional)</label><input type="email" name="Kontakt-Email" id="email-bug" class="mt-1 w-full px-3 py-2 border border-gray-300 dark:border-slate-600 bg-transparent dark:bg-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="you@example.com"></div>
-                <div class="pt-2"><button type="submit" class="w-full flex items-center justify-center py-2.5 px-5 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-all">Bug melden</button></div>
+                <div class="pt-2"><button type="submit" class="w-full flex items-center justify-center py-2.5 px-5 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 rounded-lg transition-all">Bug melden</button></div>
             </form>
         </div>
         <div id="view-confirmation" class="p-8 text-center hidden">
