@@ -277,6 +277,169 @@
                 background-position: -200% center;
             }
         }
+
+        /* --- START: FEEDBACK SYSTEM STYLES --- */
+        .feedback-button-container {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem; /* POSITIONED LEFT */
+            z-index: 1000;
+        }
+        .interactive-button {
+            position: relative;
+            width: 8rem;
+            cursor: pointer;
+            overflow: hidden;
+            border-radius: 9999px;
+            border: 1px solid var(--border-color);
+            background-color: var(--card-bg-color);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 0.5rem;
+            text-align: center;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .interactive-button .text-initial {
+            display: inline-block;
+            transform: translateX(0.25rem);
+            transition: all 0.3s;
+            position: relative;
+            z-index: 10;
+        }
+        .interactive-button:hover .text-initial {
+            transform: translateX(3rem);
+            opacity: 0;
+        }
+        .interactive-button .text-hover {
+            position: absolute; top: 0; z-index: 10; display: flex; height: 100%;
+            width: 100%; transform: translateX(3rem); align-items: center;
+            justify-content: center; gap: 0.5rem; color: white;
+            opacity: 0; transition: all 0.3s;
+        }
+        .interactive-button:hover .text-hover {
+            transform: translateX(-0.25rem);
+            opacity: 1;
+        }
+        .interactive-button .background-fill {
+            position: absolute; left: 10%; 
+            top: 40%; height: 0.5rem;
+            width: 0.5rem; transform: scale(1); border-radius: 0.5rem;
+            background-color: var(--accent-color);
+            transition: all 0.3s;
+        }
+        .interactive-button:hover .background-fill {
+            left: 0%; top: 0%; height: 100%; width: 100%; transform: scale(1.8);
+        }
+        .feedback-widget {
+            position: fixed; bottom: 6.5rem; left: 2rem; width: 380px;
+            max-width: 90vw;
+            border-radius: 1rem;
+            box-shadow: 0 8px 32px 0 var(--shadow-color);
+            overflow: hidden; z-index: 999; transform-origin: bottom left;
+            transform: scale(0.95) translateY(10px); opacity: 0; visibility: hidden;
+            transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            background-color: var(--card-bg-color);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+        }
+        .feedback-widget.active {
+            transform: scale(1) translateY(0); opacity: 1; visibility: visible;
+        }
+
+        /* Text color overrides for feedback widget */
+        .feedback-widget h2,
+        .feedback-widget .font-semibold {
+            color: var(--text-primary);
+        }
+
+        .feedback-widget p,
+        .feedback-widget label,
+        .feedback-widget .text-sm:not(.font-semibold) {
+            color: var(--text-secondary);
+        }
+
+        .feedback-action-btn { 
+             background-color: rgba(255, 255, 255, 0.4);
+        }
+        .dark-mode .feedback-action-btn {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        .category-button {
+            display: block; text-align: center; padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem; background-color: rgba(255, 255, 255, 0.4);
+            color: var(--text-secondary);
+            font-weight: 500; font-size: 0.875rem; cursor: pointer;
+            border: 1px solid transparent; transition: all 0.2s ease-in-out;
+        }
+        .dark-mode .category-button {
+             background-color: rgba(0, 0, 0, 0.2);
+        }
+        .category-button:hover { background-color: rgba(255, 255, 255, 0.6); }
+        .dark-mode .category-button:hover {
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        .category-button.active {
+            background-color: var(--accent-color);
+            color: white; 
+            border-color: var(--accent-color);
+        }
+        .sr-only {
+            position: absolute; width: 1px; height: 1px; padding: 0;
+            margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0);
+            white-space: nowrap; border-width: 0;
+        }
+
+        /* NEW: File Upload Styles */
+        .file-drop-zone {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            border: 2px dashed var(--border-color);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+        .file-drop-zone:hover, .file-drop-zone.dragover {
+            border-color: var(--accent-color);
+            background-color: rgba(0,0,0,0.05);
+        }
+        .file-preview-container {
+            position: relative;
+            width: 100px;
+            height: 100px;
+        }
+        .file-preview-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+        }
+        .file-remove-btn {
+            position: absolute;
+            top: -0.5rem;
+            right: -0.5rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 99px;
+            background-color: var(--text-primary);
+            color: var(--bg-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 2px solid var(--bg-color);
+        }
+        /* --- END: FEEDBACK SYSTEM STYLES --- */
+
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
@@ -305,7 +468,6 @@
     <main id="app-container" class="w-full max-w-4xl h-[700px] relative">
         
         <!-- Step 1: Gender Selection -->
-<!-- Step 1: Gender Selection -->
         <section id="step-1" class="step active flex flex-col justify-center items-center text-center p-8">
             <div class="glass-card rounded-2xl w-full p-8 md:p-12">
                 <h1 class="font-display text-4xl md:text-5xl font-bold mb-3 shimmer-h1">Berichtsheft by AGA</h1>
@@ -377,13 +539,109 @@
                 </div>
             </div>
         </section>
-
     </main>
 
-    <footer class="fixed bottom-4 left-4">
-        <p class="text-sm" style="color: var(--text-secondary);">Support: agachrou@schaeffler.com</p>
-    </footer>
-    
+    <!-- START: FEEDBACK SYSTEM HTML -->
+    <div class="feedback-button-container">
+        <button id="feedback-trigger-button" class="interactive-button">
+            <span class="text-initial">Feedback</span>
+            <div class="text-hover">
+                <span>Feedback</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </div>
+            <div class="background-fill"></div>
+        </button>
+    </div>
+    <div id="feedback-widget" class="feedback-widget">
+        <button id="close-widget-button" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors">
+            <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+        <div id="view-main" class="p-6">
+            <h2 class="font-display text-xl font-semibold mb-1">Wie kann Ich helfen?</h2>
+            <p class="mb-6">Wähle eine der folgenden Optionen.</p>
+            <div class="space-y-3">
+                <button id="action-give-feedback" class="feedback-action-btn group w-full text-left p-4 hover:bg-green-500/10 dark:hover:bg-green-500/10 border-2 border-transparent hover:border-green-500/20 dark:hover:border-green-500/30 rounded-lg transition-all flex items-center gap-4">
+                    <div class="bg-green-100 dark:bg-green-900/50 group-hover:bg-green-200 dark:group-hover:bg-green-900/80 rounded-lg p-2 transition-colors"><i data-lucide="lightbulb" class="w-6 h-6 text-green-600"></i></div>
+                    <div class="flex-1">
+                        <span class="font-semibold">Feedback geben</span>
+                        <p class="text-sm">Teile mir deine Ideen mit.</p>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-5 h-5 text-gray-400 group-hover:text-green-600 transition-transform group-hover:translate-x-1"></i>
+                </button>
+                <button id="action-report-bug" class="feedback-action-btn group w-full text-left p-4 hover:bg-red-500/10 dark:hover:bg-red-500/10 border-2 border-transparent hover:border-red-500/20 dark:hover:border-red-500/30 rounded-lg transition-all flex items-center gap-4">
+                     <div class="bg-red-100 dark:bg-red-900/50 group-hover:bg-red-200 dark:group-hover:bg-red-900/80 rounded-lg p-2 transition-colors"><i data-lucide="bug" class="w-6 h-6 text-red-600"></i></div>
+                     <div class="flex-1">
+                        <span class="font-semibold">Bug melden</span>
+                        <p class="text-sm">Helfe mir, Probleme zu beheben.</p>
+                    </div>
+                     <i data-lucide="chevron-right" class="w-5 h-5 text-gray-400 group-hover:text-red-600 transition-transform group-hover:translate-x-1"></i>
+                </button>
+            </div>
+        </div>
+        <div id="view-feedback-form" class="p-6 hidden">
+            <button class="back-button absolute top-4 left-4 flex items-center gap-1 text-sm hover:text-gray-800 dark:hover:text-gray-200 transition-colors"><i data-lucide="arrow-left" class="w-4 h-4"></i><span>Zurück</span></button>
+            <h2 class="font-display text-xl font-semibold text-center mb-4 mt-2">Feedback geben</h2>
+            <form id="feedback-form" action="https://formspree.io/f/IHR_CODE" method="POST" class="space-y-4" enctype="multipart/form-data">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Kategorie</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <label class="category-button active"><input type="radio" name="category" value="suggestion" class="sr-only" checked>Vorschlag</label>
+                        <label class="category-button"><input type="radio" name="category" value="problem" class="sr-only">Problem</label>
+                        <label class="category-button"><input type="radio" name="category" value="praise" class="sr-only">Lob</label>
+                    </div>
+                </div>
+                <div><textarea name="Feedback-Nachricht" class="w-full h-28 p-3 border border-gray-300 dark:border-slate-600 bg-transparent dark:bg-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 resize-none" placeholder="Teile uns deine Gedanken mit..."></textarea></div>
+                
+                <!-- Screenshot Upload Area -->
+                <div class="feedback-file-upload-area">
+                    <div class="file-drop-zone">
+                        <div class="file-drop-zone-text">
+                            <i data-lucide="image-plus" class="mx-auto w-8 h-8 mb-2"></i>
+                            <span class="font-medium">Screenshot hierher ziehen</span>
+                            <p class="text-xs mt-1">oder klicken zum Auswählen</p>
+                        </div>
+                    </div>
+                    <div class="file-preview-wrapper hidden"></div>
+                    <input type="file" name="attachment" class="hidden" accept="image/*">
+                </div>
+
+                <div><label for="email-feedback" class="block text-sm font-medium">E-Mail (optional)</label><input type="email" name="Kontakt-Email" id="email-feedback" class="mt-1 w-full px-3 py-2 border border-gray-300 dark:border-slate-600 bg-transparent dark:bg-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="you@example.com"></div>
+                <div class="pt-2"><button type="submit" class="w-full main-btn flex items-center justify-center py-2.5 px-5 text-sm font-medium text-white rounded-lg transition-all">Feedback senden</button></div>
+            </form>
+        </div>
+        <div id="view-bug-form" class="p-6 hidden">
+             <button class="back-button absolute top-4 left-4 flex items-center gap-1 text-sm hover:text-gray-800 dark:hover:text-gray-200 transition-colors"><i data-lucide="arrow-left" class="w-4 h-4"></i><span>Zurück</span></button>
+            <h2 class="font-display text-xl font-semibold text-center mb-4 mt-2">Bug melden</h2>
+            <form id="bug-form" action="https://formspree.io/f/IHR_CODE" method="POST" class="space-y-4" enctype="multipart/form-data">
+                <div><label for="bug-summary" class="block text-sm font-medium">Zusammenfassung</label><input type="text" name="Bug-Zusammenfassung" id="bug-summary" class="mt-1 w-full px-3 py-2 border border-gray-300 dark:border-slate-600 bg-transparent dark:bg-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="z.B. Button funktioniert nicht"></div>
+                <div><label class="block text-sm font-medium">Schritte zur Reproduktion</label><textarea name="Schritte-zur-Reproduktion" class="w-full h-28 p-3 border border-gray-300 dark:border-slate-600 bg-transparent dark:bg-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 resize-none" placeholder="Bitte beschreibe den Fehler..."></textarea></div>
+                
+                 <!-- Screenshot Upload Area -->
+                <div class="bug-file-upload-area">
+                    <div class="file-drop-zone">
+                       <div class="file-drop-zone-text">
+                            <i data-lucide="image-plus" class="mx-auto w-8 h-8 mb-2"></i>
+                            <span class="font-medium">Screenshot hierher ziehen</span>
+                            <p class="text-xs mt-1">oder klicken zum Auswählen</p>
+                        </div>
+                    </div>
+                    <div class="file-preview-wrapper hidden"></div>
+                    <input type="file" name="attachment" class="hidden" accept="image/*">
+                </div>
+
+                <div><label for="email-bug" class="block text-sm font-medium">E-Mail (optional)</label><input type="email" name="Kontakt-Email" id="email-bug" class="mt-1 w-full px-3 py-2 border border-gray-300 dark:border-slate-600 bg-transparent dark:bg-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="you@example.com"></div>
+                <div class="pt-2"><button type="submit" class="w-full flex items-center justify-center py-2.5 px-5 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-all">Bug melden</button></div>
+            </form>
+        </div>
+        <div id="view-confirmation" class="p-8 text-center hidden">
+            <div class="mx-auto w-16 h-16 flex items-center justify-center bg-green-100 rounded-full mb-4"><i data-lucide="check" class="w-10 h-10 text-green-600"></i></div>
+            <h2 class="font-display text-xl font-semibold mb-2">Vielen Dank!</h2>
+            <p>Wir haben Ihre Meldung erhalten.</p>
+            <button id="done-button" class="mt-6 w-full main-btn py-2.5 px-5 text-sm font-medium text-white rounded-lg transition-all">Fertig</button>
+        </div>
+    </div>
+    <!-- END: FEEDBACK SYSTEM HTML -->
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
@@ -395,8 +653,7 @@
                 days: ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag'],
             };
 
-            // test
-            // --- DOM ELEMENTS ---
+            // --- DOM ELEMENTS (MAIN APP) ---
             const steps = document.querySelectorAll('.step');
             const maleBtn = document.getElementById('btn-male');
             const femaleBtn = document.getElementById('btn-female');
@@ -408,20 +665,16 @@
             const resetBtn = document.getElementById('reset-btn');
             const errorContainer = document.getElementById('error-container');
 
-            // --- FUNCTIONS ---
+            // --- FUNCTIONS (MAIN APP) ---
             const showError = (message) => {
                 errorContainer.innerHTML = `<div class="error-message p-2 rounded-md font-semibold">${message}</div>`;
-                setTimeout(() => {
-                    errorContainer.innerHTML = '';
-                }, 3000);
+                setTimeout(() => { errorContainer.innerHTML = ''; }, 3000);
             };
 
             const createDayInputCards = () => {
                 if (dayInputsGrid.children.length > 0) return; 
-
                 dayInputsGrid.classList.remove('sm:grid-cols-2', 'lg:grid-cols-3');
                 dayInputsGrid.classList.add('grid-cols-1');
-
                 state.days.forEach((day, index) => {
                     const card = document.createElement('div');
                     card.className = 'flex flex-col';
@@ -433,18 +686,58 @@
                 });
             };
 
-
             const navigateToStep = (stepNumber) => {
-                if (stepNumber === 2) {
-                    createDayInputCards();
-                }
+                if (stepNumber === 2) createDayInputCards();
                 state.currentStep = stepNumber;
                 steps.forEach((step, index) => {
                     step.classList.toggle('active', index + 1 === stepNumber);
                 });
             };
+            
+            async function callGeminiApi(inputs, gender) {
+                const functionUrl = '/.netlify/functions/generate';
+                const loadingMessages = inputs.map((inp, i) => inp ? `Formuliere ${state.days[i]}...` : null).filter(Boolean);
+                loadingMessages.push("Finalisiere Bericht...");
+                let messageIndex = 0;
+                
+                const updateLoadingText = () => {
+                    if(messageIndex < loadingMessages.length) {
+                        loadingStatus.textContent = loadingMessages[messageIndex];
+                        messageIndex++;
+                    }
+                };
+                updateLoadingText();
+                const loadingInterval = setInterval(updateLoadingText, 2000);
+                
+                try {
+                    const response = await fetch(functionUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            inputs: inputs, 
+                            gender: gender,
+                            days: state.days
+                        })
+                    });
 
-            const handleGenerate = async () => {
+                    clearInterval(loadingInterval);
+
+                    if (!response.ok) {
+                        const errorResult = await response.json();
+                        throw new Error(errorResult.error || 'An unknown error occurred.');
+                    }
+
+                    const results = await response.json();
+                    return results;
+
+                } catch (error) {
+                    clearInterval(loadingInterval);
+                    console.error("Error calling the Netlify Function:", error);
+                    throw error;
+                }
+            }
+            
+            async function handleGenerate() {
                 const inputs = Array.from(document.querySelectorAll('#day-inputs-grid textarea')).map(textarea => textarea.value.trim());
                 if (inputs.every(input => input === '')) {
                      showError('Bitte geben Sie für mindestens einen Tag eine Tätigkeit ein.'); 
@@ -463,8 +756,8 @@
                     navigateToStep(2);
                 }
             };
-            
-            const displayResults = (reports) => {
+
+            function displayResults(reports) {
                 reportOutput.innerHTML = '';
                 reports.forEach((report, index) => {
                     if (report.text) {
@@ -486,7 +779,7 @@
                 lucide.createIcons();
             };
 
-            const resetApp = () => {
+            function resetApp() {
                 state.selectedGender = null;
                 maleBtn.classList.remove('active');
                 femaleBtn.classList.remove('active');
@@ -496,46 +789,8 @@
                 }
                 navigateToStep(1);
             };
-
-            // --- EVENT LISTENERS ---
-            maleBtn.addEventListener('click', () => {
-                state.selectedGender = 'male';
-                maleBtn.classList.add('active');
-                femaleBtn.classList.remove('active');
-                setTimeout(() => navigateToStep(2), 300);
-            });
-
-            femaleBtn.addEventListener('click', () => {
-                state.selectedGender = 'female';
-                femaleBtn.classList.add('active');
-                maleBtn.classList.remove('active');
-                setTimeout(() => navigateToStep(2), 300);
-            });
             
-            backToGenderBtn.addEventListener('click', () => navigateToStep(1));
-
-            generateBtn.addEventListener('click', handleGenerate);
-            resetBtn.addEventListener('click', resetApp);
-            
-            reportOutput.addEventListener('click', (e) => {
-                const button = e.target.closest('.copy-btn');
-                if (button) {
-                    const textToCopy = button.dataset.copytext;
-                    // Use modern clipboard API with fallback
-                    if (navigator.clipboard && window.isSecureContext) {
-                        navigator.clipboard.writeText(textToCopy).then(() => {
-                           updateCopyButton(button);
-                        }).catch(err => {
-                            console.error('Modern copy failed:', err);
-                            fallbackCopyText(textToCopy, button);
-                        });
-                    } else {
-                        fallbackCopyText(textToCopy, button);
-                    }
-                }
-            });
-
-            const updateCopyButton = (button) => {
+            function updateCopyButton(button) {
                 const textSpan = button.querySelector('.copy-text');
                 if(textSpan) textSpan.textContent = 'Kopiert!';
                 button.classList.add('copied');
@@ -545,7 +800,7 @@
                 }, 2000);
             }
 
-            const fallbackCopyText = (text, button) => {
+            function fallbackCopyText(text, button) {
                  const textArea = document.createElement("textarea");
                  textArea.value = text;
                  textArea.style.position = "fixed";
@@ -562,78 +817,205 @@
                  document.body.removeChild(textArea);
             };
 
+            // --- EVENT LISTENERS (MAIN APP) ---
+            maleBtn.addEventListener('click', () => {
+                state.selectedGender = 'male';
+                maleBtn.classList.add('active');
+                femaleBtn.classList.remove('active');
+                setTimeout(() => navigateToStep(2), 300);
+            });
+
+            femaleBtn.addEventListener('click', () => {
+                state.selectedGender = 'female';
+                femaleBtn.classList.add('active');
+                maleBtn.classList.remove('active');
+                setTimeout(() => navigateToStep(2), 300);
+            });
+            
+            backToGenderBtn.addEventListener('click', () => navigateToStep(1));
+            generateBtn.addEventListener('click', handleGenerate);
+            resetBtn.addEventListener('click', resetApp);
+            
+            reportOutput.addEventListener('click', (e) => {
+                const button = e.target.closest('.copy-btn');
+                if (button) {
+                    const textToCopy = button.dataset.copytext;
+                    if (navigator.clipboard && window.isSecureContext) {
+                        navigator.clipboard.writeText(textToCopy).then(() => {
+                           updateCopyButton(button);
+                        }).catch(err => {
+                            console.error('Modern copy failed:', err);
+                            fallbackCopyText(textToCopy, button);
+                        });
+                    } else {
+                        fallbackCopyText(textToCopy, button);
+                    }
+                }
+            });
 
             // --- THEME TOGGLE ---
             const themeToggle = document.getElementById('theme-toggle');
             const sunIcon = document.getElementById('theme-icon-sun');
             const moonIcon = document.getElementById('theme-icon-moon');
+            const htmlEl = document.documentElement;
             const currentTheme = localStorage.getItem('theme');
 
             if (currentTheme === 'dark') {
-                document.documentElement.classList.add('dark-mode');
+                htmlEl.classList.add('dark-mode');
                 sunIcon.classList.add('hidden');
                 moonIcon.classList.remove('hidden');
             }
 
             themeToggle.addEventListener('click', () => {
-                document.documentElement.classList.toggle('dark-mode');
+                htmlEl.classList.toggle('dark-mode');
                 sunIcon.classList.toggle('hidden');
                 moonIcon.classList.toggle('hidden');
-                let theme = document.documentElement.classList.contains('dark-mode') ? 'dark' : 'light';
+                let theme = htmlEl.classList.contains('dark-mode') ? 'dark' : 'light';
                 localStorage.setItem('theme', theme);
             });
 
-            // --- API CALL LOGIC (NEU & SICHER) ---
-            async function callGeminiApi(inputs, gender) {
-                // The API call now points to our own secure function instead of directly to Google.
-                const functionUrl = '/.netlify/functions/generate';
-
-                const loadingMessages = inputs.map((inp, i) => inp ? `Formuliere ${state.days[i]}...` : null).filter(Boolean);
-                loadingMessages.push("Finalisiere Bericht...");
-                let messageIndex = 0;
-                
-                const updateLoadingText = () => {
-                    if(messageIndex < loadingMessages.length) {
-                        loadingStatus.textContent = loadingMessages[messageIndex];
-                        messageIndex++;
-                    }
-                };
-                updateLoadingText();
-                const loadingInterval = setInterval(updateLoadingText, 2000);
-                
-                try {
-                    // We send all inputs to our backend at once.
-                    const response = await fetch(functionUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ 
-                            inputs: inputs, 
-                            gender: gender,
-                            days: state.days // Send the days along so the backend has them
-                        })
-                    });
-
-                    clearInterval(loadingInterval);
-
-                    if (!response.ok) {
-                        const errorResult = await response.json();
-                        throw new Error(errorResult.error || 'An unknown error occurred.');
-                    }
-
-                    const results = await response.json();
-                    return results;
-
-                } catch (error) {
-                    clearInterval(loadingInterval);
-                    console.error("Error calling the Netlify Function:", error);
-                    // Re-throw the error to be caught by the handleGenerate function
-                    throw error;
-                }
-            }
-
             // --- INITIALIZATION ---
             navigateToStep(1);
+
+
+            // -----------------------------------------------------------------
+            // --- START: FEEDBACK SYSTEM LOGIC ---
+            // -----------------------------------------------------------------
+            const feedbackTriggerButton = document.getElementById('feedback-trigger-button');
+            const feedbackWidget = document.getElementById('feedback-widget');
+            const closeWidgetButton = document.getElementById('close-widget-button');
+            const viewMain = document.getElementById('view-main');
+            const viewFeedbackForm = document.getElementById('view-feedback-form');
+            const viewBugForm = document.getElementById('view-bug-form');
+            const viewConfirmation = document.getElementById('view-confirmation');
+            const actionGiveFeedback = document.getElementById('action-give-feedback');
+            const actionReportBug = document.getElementById('action-report-bug');
+            const backButtons = document.querySelectorAll('.back-button');
+            const feedbackForm = document.getElementById('feedback-form');
+            const bugForm = document.getElementById('bug-form');
+            const doneButton = document.getElementById('done-button');
+            const categoryButtons = document.querySelectorAll('.category-button');
+
+            const openWidget = () => feedbackWidget.classList.add('active');
+            const closeWidget = () => {
+                feedbackWidget.classList.remove('active');
+                setTimeout(() => {
+                    showView(viewMain);
+                     // Reset file previews on close
+                    document.querySelectorAll('.file-preview-wrapper').forEach(p => {
+                        p.innerHTML = '';
+                        p.classList.add('hidden');
+                    });
+                    document.querySelectorAll('.file-drop-zone').forEach(d => d.classList.remove('hidden'));
+
+                }, 200);
+            };
+            
+            const showView = (viewToShow) => {
+                [viewMain, viewFeedbackForm, viewBugForm, viewConfirmation].forEach(v => v.classList.add('hidden'));
+                viewToShow.classList.remove('hidden');
+                 lucide.createIcons(); // Re-render icons when view changes
+            };
+
+            feedbackTriggerButton.addEventListener('click', openWidget);
+            closeWidgetButton.addEventListener('click', closeWidget);
+            actionGiveFeedback.addEventListener('click', () => showView(viewFeedbackForm));
+            actionReportBug.addEventListener('click', () => showView(viewBugForm));
+            backButtons.forEach(button => button.addEventListener('click', () => showView(viewMain)));
+            
+            // We show our own confirmation, so we prevent default and handle with fetch
+            feedbackForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                // Here you would add fetch() logic to send form data
+                showView(viewConfirmation);
+            });
+            bugForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                 // Here you would add fetch() logic to send form data
+                showView(viewConfirmation);
+            });
+            
+            doneButton.addEventListener('click', closeWidget);
+
+            categoryButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    categoryButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                });
+            });
+
+            // File Upload Logic
+            const setupUploader = (containerSelector) => {
+                const container = document.querySelector(containerSelector);
+                if (!container) return;
+
+                const dropZone = container.querySelector('.file-drop-zone');
+                const fileInput = container.querySelector('input[type="file"]');
+                const previewWrapper = container.querySelector('.file-preview-wrapper');
+                
+                dropZone.addEventListener('click', () => fileInput.click());
+                fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
+
+                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                    dropZone.addEventListener(eventName, (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    });
+                });
+                
+                ['dragenter', 'dragover'].forEach(eventName => {
+                    dropZone.addEventListener(eventName, () => dropZone.classList.add('dragover'));
+                });
+
+                ['dragleave', 'drop'].forEach(eventName => {
+                    dropZone.addEventListener(eventName, () => dropZone.classList.remove('dragover'));
+                });
+
+                dropZone.addEventListener('drop', (e) => handleFiles(e.dataTransfer.files));
+
+                const handleFiles = (files) => {
+                    const file = files[0];
+                    if (file && file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            previewWrapper.innerHTML = `
+                                <div class="file-preview-container">
+                                    <img src="${e.target.result}" class="file-preview-img" />
+                                    <div class="file-remove-btn">
+                                        <i data-lucide="x" class="w-4 h-4"></i>
+                                    </div>
+                                </div>
+                            `;
+                            lucide.createIcons();
+                            previewWrapper.classList.remove('hidden');
+                            dropZone.classList.add('hidden');
+
+                            previewWrapper.querySelector('.file-remove-btn').addEventListener('click', () => {
+                                fileInput.value = ''; // Important for re-uploading the same file
+                                previewWrapper.innerHTML = '';
+                                previewWrapper.classList.add('hidden');
+                                dropZone.classList.remove('hidden');
+                            });
+                        }
+                        reader.readAsDataURL(file);
+                    }
+                };
+            };
+
+            setupUploader('.feedback-file-upload-area');
+            setupUploader('.bug-file-upload-area');
+
+
+            document.addEventListener('click', (event) => {
+                const isClickInsideWidget = feedbackWidget.contains(event.target);
+                const isClickOnButton = feedbackTriggerButton.contains(event.target);
+                if (!isClickInsideWidget && !isClickOnButton) {
+                    closeWidget();
+                }
+            });
+            // --- END: FEEDBACK SYSTEM LOGIC ---
         });
     </script>
 </body>
 </html>
+
