@@ -17,7 +17,8 @@ exports.handler = async (event) => {
             throw new Error("API key is not set in environment variables.");
         }
 
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`;
+        // Aktualisiertes Modell für potenziell bessere Qualität
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
 
         // Die Logik zur Erstellung der Prompts und der parallelen API-Aufrufe
         // wird vom Frontend ins sichere Backend verschoben.
@@ -31,18 +32,19 @@ exports.handler = async (event) => {
             const pronoun = gender === 'male' ? 'Er' : 'Sie';
             const possessive = gender === 'male' ? 'Seine' : 'Ihre';
 
+            // --- NEUER, ANGEPASSTER PROMPT ---
             const userPrompt = `
-                Du bist ein Assistent, der Auszubildenden hilft, ihr Berichtsheft zu schreiben.
-                Deine Aufgabe ist es, die vom Benutzer eingegebenen Tätigkeiten für einen ${genderText} Auszubildenden in einen professionellen, zusammenhängenden Bericht umzuwandeln. Die Eingabe kann aus Stichpunkten, kommagetrennten Sätzen oder unstrukturiertem Text bestehen.
+                Du bist ein erfahrener Ausbildungsbetreuer, der einem ${genderText} Auszubildenden dabei hilft, ein vorbildliches Berichtsheft zu verfassen.
+                Deine Aufgabe ist es, die stichpunktartigen oder unstrukturierten Tätigkeiten des Auszubildenden in einen professionellen und gut lesbaren Bericht umzuwandeln. Das Ziel ist eine qualitativ hochwertige und prägnante Zusammenfassung der Tagesaufgaben.
 
-                Wichtige Regeln, die du unbedingt befolgen musst:
-                1. Formuliere einen flüssigen Einleitungssatz. Beginne den Bericht mit einer natürlichen Formulierung, die den Wochentag einbezieht. Starre Anfänge wie "Am Montag hat der Auszubildende..." sollen vermieden werden. Gutes Beispiel: "Der ${day} begann für den Auszubildenden mit..." oder "Am ${day}morgen startete der Auszubildende mit der Aufgabe, ...".
-                2. Schreibe den gesamten Text in der 3. Person Singular (z.B. "Der Auszubildende hat...", "${pronoun} führte aus...", "${possessive} Aufgaben umfassten..."). Beachte das Geschlecht. Verwende niemals "Ich" oder "Man".
-                3. Schreibe in einem sachlichen, aber natürlichen Stil, so wie es ein Auszubildender in seinem Berichtsheft tun würde. Es sollte kompetent klingen, aber nicht übertrieben formell oder gestelzt. Formuliere ganze, grammatikalisch korrekte Sätze.
-                4. Fasse die Tätigkeiten logisch zusammen. Wandle die Stichpunkte in einen flüssig lesbaren Text um und zähle sie nicht einfach nur auf.
-                5. Der Output darf NUR der reine Berichtshefttext sein, ohne zusätzliche Anmerkungen, Titel oder den Tagesnamen am Anfang (z.B. "Montag: ..."). Gib nur den Fließtext zurück.
+                Wichtige Regeln, die du ausnahmslos befolgen musst:
+                1.  **Prägnanz und Klarheit:** Wandle die Stichpunkte in einen flüssigen Bericht um, der die Tätigkeiten klar beschreibt. Erläutere wichtige Aufgaben kurz und verständlich, ohne unnötig auszuschweifen. Das Ziel ist ein professioneller, gut lesbarer Text von angemessener Länge (ca. 5-7 Sätze), der die wesentlichen Tagesaufgaben zusammenfasst.
+                2.  **Professioneller Stil:** Schreibe in der 3. Person Singular (z.B. "Der Auszubildende widmete sich...", "${pronoun} analysierte...", "${possessive} Hauptaufgabe war..."). Achte auf das korrekte Geschlecht. Verwende niemals "Ich" oder "Man". Nutze einen sachlichen, kompetenten Ton und integriere, wo passend, fachliche Begriffe.
+                3.  **Flüssiger Textfluss:** Beginne den Bericht mit einem abwechslungsreichen Einleitungssatz, der den Wochentag organisch einbindet (z.B. "Am ${day} setzte der Auszubildende seine Arbeit an... fort." oder "Der ${day} stand ganz im Zeichen von..."). Verbinde die einzelnen Tätigkeiten logisch miteinander, anstatt sie nur aufzuzählen.
+                4.  **Struktur:** Gliedere den Tagesablauf nachvollziehbar. Beginne oft mit der wichtigsten Aufgabe und beschreibe dann weitere Tätigkeiten in logischer Reihenfolge.
+                5.  **Reiner Output:** Das Ergebnis darf NUR der Berichtshefttext sein. Keine Überschriften, keine Anmerkungen, keine Einleitungen wie "Hier ist der Bericht:" und nicht den Tagesnamen voranstellen.
 
-                Hier sind die Tätigkeiten für den ${day}:
+                Hier sind die Tätigkeiten für den ${day}, die du ausarbeiten sollst:
                 ---
                 ${activities}
                 ---
@@ -78,3 +80,4 @@ exports.handler = async (event) => {
         };
     }
 };
+
