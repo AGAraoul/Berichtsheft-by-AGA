@@ -609,7 +609,7 @@
         <div id="view-feedback-form" class="p-6 hidden">
             <button class="back-button absolute top-4 left-4 flex items-center gap-1 text-sm hover:text-gray-800 dark:hover:text-gray-200 transition-colors"><i data-lucide="arrow-left" class="w-4 h-4"></i><span>Zurück</span></button>
             <h2 class="font-display text-xl font-semibold text-center mb-4 mt-2">Feedback geben</h2>
-            <form id="feedback-form" action="https://formspree.io/f/IHR_CODE" method="POST" class="space-y-4" enctype="multipart/form-data">
+            <form id="feedback-form" action="https://formspree.io/f/xwprybab" method="POST" class="space-y-4" enctype="multipart/form-data">
                 <div>
                     <label class="block text-sm font-medium mb-2">Kategorie</label>
                     <div> <label class="category-button active"><input type="radio" name="category" value="suggestion" class="sr-only" checked>Vorschlag</label>
@@ -637,7 +637,7 @@
         <div id="view-bug-form" class="p-6 hidden">
              <button class="back-button absolute top-4 left-4 flex items-center gap-1 text-sm hover:text-gray-800 dark:hover:text-gray-200 transition-colors"><i data-lucide="arrow-left" class="w-4 h-4"></i><span>Zurück</span></button>
             <h2 class="font-display text-xl font-semibold text-center mb-4 mt-2">Bug melden</h2>
-            <form id="bug-form" action="https://formspree.io/f/IHR_CODE" method="POST" class="space-y-4" enctype="multipart/form-data">
+            <form id="bug-form" action="https://formspree.io/f/xwprybab" method="POST" class="space-y-4" enctype="multipart/form-data">
                 <div><label for="bug-summary" class="block text-sm font-medium">Zusammenfassung</label><input type="text" name="Bug-Zusammenfassung" id="bug-summary" class="mt-1 w-full p-3 border border-gray-300 dark:border-slate-600 bg-white dark:bg-transparent text-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="z.B. Button funktioniert nicht"></div>
                 <div>
                     <label class="block text-sm font-medium">Schritte zur Reproduktion</label>
@@ -951,17 +951,54 @@
             actionReportBug.addEventListener('click', () => showView(viewBugForm));
             backButtons.forEach(button => button.addEventListener('click', () => showView(viewMain)));
             
-            // We show our own confirmation, so we prevent default and handle with fetch
-            feedbackForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                // Here you would add fetch() logic to send form data
-                showView(viewConfirmation);
-            });
-            bugForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                 // Here you would add fetch() logic to send form data
-                showView(viewConfirmation);
-            });
+            // --- START: Angepasste Formular-Übermittlung ---
+
+            // Eine wiederverwendbare Funktion, um Formulare per Fetch zu senden
+            async function handleFormSubmit(event) {
+                event.preventDefault(); // Standard-Formularsendung verhindern
+                const form = event.target;
+                const data = new FormData(form);
+                
+                try {
+                    const response = await fetch(form.action, {
+                        method: form.method,
+                        body: data,
+                        headers: {
+                            'Accept': 'application/json' // Formspree empfiehlt dies für AJAX-Anfragen
+                        }
+                    });
+
+                    if (response.ok) {
+                        // Bei Erfolg die Bestätigungsseite anzeigen
+                        showView(viewConfirmation);
+                        form.reset(); // Formularfelder leeren
+                        // Auch die Dateivorschau zurücksetzen
+                        const previewWrapper = form.querySelector('.file-preview-wrapper');
+                        const dropZone = form.querySelector('.file-drop-zone');
+                        if (previewWrapper && dropZone) {
+                             previewWrapper.innerHTML = '';
+                             previewWrapper.classList.add('hidden');
+                             dropZone.classList.remove('hidden');
+                        }
+                    } else {
+                        // Bei einem Fehler (z.B. Formspree-Validierung)
+                        // Könnten Sie hier eine Fehlermeldung anzeigen
+                        console.error('Formular-Übermittlung fehlgeschlagen', await response.json());
+                        alert('Fehler beim Senden. Bitte versuchen Sie es erneut.');
+                    }
+                } catch (error) {
+                    console.error('Netzwerkfehler:', error);
+                    alert('Fehler beim Senden. Bitte prüfen Sie Ihre Internetverbindung.');
+                }
+            }
+
+            // Die Funktion an beide Formulare binden
+            feedbackForm.addEventListener('submit', handleFormSubmit);
+            bugForm.addEventListener('submit', handleFormSubmit);
+            
+            // --- ENDE: Angepasste Formular-Übermittlung ---
+            
+            doneButton.addEventListener('click', closeWidget);
             
             doneButton.addEventListener('click', closeWidget);
 
