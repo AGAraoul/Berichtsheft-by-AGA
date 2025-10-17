@@ -162,12 +162,12 @@
             color: var(--text-primary);
         }
 
-        textarea {
+        #day-inputs-grid textarea {
             background-color: rgba(0,0,0,0.1);
             border: 1px solid var(--border-color);
             color: var(--text-primary);
         }
-        textarea:focus {
+        #day-inputs-grid textarea:focus {
             outline: none;
             border-color: var(--accent-color);
             box-shadow: 0 0 0 2px var(--accent-color);
@@ -412,6 +412,33 @@
             border-color: var(--accent-color);
             background-color: rgba(0,0,0,0.05);
         }
+
+        /* DIESEN BLOCK ANPASSEN/ERSETZEN (ca. Zeile 416) */
+/* Überschreibt Hover/Dragover-Stile NUR für Bug-Formular Drop-Zone */
+#view-bug-form .bug-file-upload-area .file-drop-zone:hover,
+#view-bug-form .bug-file-upload-area .file-drop-zone.dragover {
+    border-color: var(--error-color); /* Setzt Hover/Dragover-Rahmen auf Rot */
+    background-color: rgba(239, 68, 68, 0.05); /* Optional: Leichter roter Hintergrund beim Hovern/Dragover */
+}
+
+        /* FIX: Textfarbe für Feedback/Bug-Formular-Felder im Light Mode setzen */
+#view-feedback-form input[type="email"],
+#view-feedback-form textarea,
+#view-bug-form input[type="text"],
+#view-bug-form input[type="email"],
+#view-bug-form textarea {
+    color: var(--text-primary); /* Setzt Textfarbe auf die primäre Textfarbe (dunkel) */
+}
+
+/* Stellt sicher, dass die Dark-Mode-Farbe weiterhin funktioniert */
+.dark-mode #view-feedback-form input[type="email"],
+.dark-mode #view-feedback-form textarea,
+.dark-mode #view-bug-form input[type="text"],
+.dark-mode #view-bug-form input[type="email"],
+.dark-mode #view-bug-form textarea {
+    color: var(--text-primary); /* Im Dark Mode ist --text-primary hell (#e2e8f0) */
+}
+
         .file-preview-container {
             position: relative;
             width: 100px;
@@ -585,13 +612,10 @@
             <form id="feedback-form" action="https://formspree.io/f/IHR_CODE" method="POST" class="space-y-4" enctype="multipart/form-data">
                 <div>
                     <label class="block text-sm font-medium mb-2">Kategorie</label>
-                    <div class="grid grid-cols-3 gap-2">
-                        <label class="category-button active"><input type="radio" name="category" value="suggestion" class="sr-only" checked>Vorschlag</label>
-                        <label class="category-button"><input type="radio" name="category" value="problem" class="sr-only">Problem</label>
-                        <label class="category-button"><input type="radio" name="category" value="praise" class="sr-only">Lob</label>
-                    </div>
+                    <div> <label class="category-button active"><input type="radio" name="category" value="suggestion" class="sr-only" checked>Vorschlag</label>
+                        </div>
                 </div>
-                <div><textarea name="Feedback-Nachricht" class="w-full h-28 p-3 border border-gray-300 dark:border-slate-600 bg-transparent dark:bg-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 resize-none" placeholder="Teile uns deine Gedanken mit..."></textarea></div>
+                <div><textarea name="Feedback-Nachchricht" class="w-full h-28 p-3 border border-gray-300 dark:border-slate-600 bg-white dark:bg-transparent text-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none resize-none focus:ring-2 focus:ring-green-500" placeholder="Teile mir deine Gedanken mit..."></textarea></div>
                 
                 <!-- Screenshot Upload Area -->
                 <div class="feedback-file-upload-area">
@@ -606,7 +630,7 @@
                     <input type="file" name="attachment" class="hidden" accept="image/*">
                 </div>
 
-                <div><label for="email-feedback" class="block text-sm font-medium">E-Mail (optional)</label><input type="email" name="Kontakt-Email" id="email-feedback" class="mt-1 w-full px-3 py-2 border border-gray-300 dark:border-slate-600 bg-transparent dark:bg-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="you@example.com"></div>
+                <div><label for="email-feedback" class="block text-sm font-medium">E-Mail (optional)</label><input type="email" name="Kontakt-Email" id="email-feedback" class="mt-1 w-full p-3 border border-gray-300 dark:border-slate-600 bg-white dark:bg-transparent text-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="you@example.com"></div>
                 <div class="pt-2"><button type="submit" class="w-full main-btn flex items-center justify-center py-2.5 px-5 text-sm font-semibold text-white rounded-lg transition-all">Feedback senden</button></div>
             </form>
         </div>
@@ -614,10 +638,10 @@
              <button class="back-button absolute top-4 left-4 flex items-center gap-1 text-sm hover:text-gray-800 dark:hover:text-gray-200 transition-colors"><i data-lucide="arrow-left" class="w-4 h-4"></i><span>Zurück</span></button>
             <h2 class="font-display text-xl font-semibold text-center mb-4 mt-2">Bug melden</h2>
             <form id="bug-form" action="https://formspree.io/f/IHR_CODE" method="POST" class="space-y-4" enctype="multipart/form-data">
-                <div><label for="bug-summary" class="block text-sm font-medium">Zusammenfassung</label><input type="text" name="Bug-Zusammenfassung" id="bug-summary" class="mt-1 w-full px-3 py-2 border border-gray-300 dark:border-slate-600 bg-transparent dark:bg-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="z.B. Button funktioniert nicht"></div>
+                <div><label for="bug-summary" class="block text-sm font-medium">Zusammenfassung</label><input type="text" name="Bug-Zusammenfassung" id="bug-summary" class="mt-1 w-full p-3 border border-gray-300 dark:border-slate-600 bg-white dark:bg-transparent text-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="z.B. Button funktioniert nicht"></div>
                 <div>
                     <label class="block text-sm font-medium">Schritte zur Reproduktion</label>
-                    <textarea name="Schritte-zur-Reproduktion" class="w-full h-28 p-3 border border-gray-300 dark:border-slate-600 bg-transparent dark:bg-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500 resize-none" placeholder="Bitte beschreibe den Fehler..."></textarea>
+                 <textarea name="Schritte-zur-Reproduktion" class="w-full h-28 p-3 border border-gray-300 dark:border-slate-600 bg-white dark:bg-transparent text-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500 resize-none" placeholder="Bitte beschreibe den Fehler..."></textarea>   
                 </div>
                 
                  <!-- Screenshot Upload Area -->
@@ -633,7 +657,7 @@
                     <input type="file" name="attachment" class="hidden" accept="image/*">
                 </div>
 
-                <div><label for="email-bug" class="block text-sm font-medium">E-Mail (optional)</label><input type="email" name="Kontakt-Email" id="email-bug" class="mt-1 w-full px-3 py-2 border border-gray-300 dark:border-slate-600 bg-transparent dark:bg-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="you@example.com"></div>
+                <div><label for="email-bug" class="block text-sm font-medium">E-Mail (optional)</label><input type="email" name="Kontakt-Email" id="email-bug" class="mt-1 w-full p-3 border border-gray-300 dark:border-slate-600 bg-white dark:bg-transparent text-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="you@example.com"></div>
                 <div class="pt-2"><button type="submit" class="w-full flex items-center justify-center py-2.5 px-5 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 rounded-lg transition-all">Bug melden</button></div>
             </form>
         </div>
@@ -641,7 +665,7 @@
             <div class="mx-auto w-16 h-16 flex items-center justify-center bg-green-100 rounded-full mb-4"><i data-lucide="check" class="w-10 h-10 text-green-600"></i></div>
             <h2 class="font-display text-xl font-semibold mb-2">Vielen Dank!</h2>
             <p>Wir haben Ihre Meldung erhalten.</p>
-            <button id="done-button" class="mt-6 w-full main-btn py-2.5 px-5 text-sm font-medium text-white rounded-lg transition-all">Fertig</button>
+            <button id="done-button" class="mt-6 w-full main-btn py-2.5 px-5 text-sm font-semibold text-white rounded-lg transition-all">Fertig</button>
         </div>
     </div>
     <!-- END: FEEDBACK SYSTEM HTML -->
