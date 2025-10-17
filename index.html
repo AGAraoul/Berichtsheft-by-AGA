@@ -536,6 +536,25 @@
         }
         /* --- END: FEEDBACK SYSTEM STYLES --- */
 
+        /* NEU: Animation für Update-Badge */
+        @keyframes pulse-red {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); /* Corresponds to red-600 */
+            }
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 10px rgba(220, 38, 38, 0);
+            }
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(220, 38, 38, 0);
+            }
+        }
+        #update-new-badge.pulsing {
+            animation: pulse-red 1.5s infinite;
+        }
+
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
@@ -549,14 +568,21 @@
     <!-- Header with Buttons -->
     <header class="fixed top-4 left-4 right-4 z-50 flex items-center justify-between">
         <!-- Left Side: Updates Button -->
-        <button id="updates-trigger-button" class="interactive-button">
-            <span class="text-initial">Updates</span>
-            <div class="text-hover">
-                <span>Updates</span>
-                <i data-lucide="bell" class="w-4 h-4"></i>
-            </div>
-            <div class="background-fill"></div>
-        </button>
+        <!-- NEU: Wrapper, um das Badge außerhalb des Buttons positionieren zu können -->
+        <div class="relative">
+            <button id="updates-trigger-button" class="interactive-button">
+                <span class="text-initial">Updates</span>
+                <div class="text-hover">
+                    <span>Updates</span>
+                    <i data-lucide="bell" class="w-4 h-4"></i>
+                </div>
+                <div class="background-fill"></div>
+            </button>
+            <!-- Das "NEU"-Badge wurde hierher verschoben und angepasst -->
+            <span id="update-new-badge" class="hidden absolute -top-1 -right-2 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                NEU
+            </span>
+        </div>
     
         <!-- Right Side: Theme Toggle & Logo -->
         <div class="flex items-center gap-4">
@@ -1042,11 +1068,49 @@
             const updatesTriggerButton = document.getElementById('updates-trigger-button');
             const updatesContainer = document.getElementById('updates-container');
             const closeUpdatesWidget = document.getElementById('close-updates-widget');
+            
+            // --- NEU: LOGIK FÜR "NEU"-BADGE ---
+            const LATEST_UPDATE_SEEN_KEY = 'latestUpdateSeen'; // Key für localStorage
+            const updateBadge = document.getElementById('update-new-badge');
+            const firstUpdateItem = document.querySelector('#updates-content .update-item');
+
+            // Funktion, um das "Gesehen"-Datum zu speichern und Badge zu verstecken
+            const markUpdatesAsSeen = () => {
+                if (!firstUpdateItem || !updateBadge) return; // Sicherheitscheck
+
+                const firstUpdateDateSpan = firstUpdateItem.querySelector('.text-sm.text-gray-500');
+                
+                if (firstUpdateDateSpan) {
+                    const currentLatestUpdateId = firstUpdateDateSpan.textContent.trim();
+                    localStorage.setItem(LATEST_UPDATE_SEEN_KEY, currentLatestUpdateId);
+                }
+                updateBadge.classList.add('hidden');
+                updateBadge.classList.remove('pulsing'); // NEU: Animation stoppen
+            };
+
+            // Funktion, um beim Laden der Seite zu prüfen, ob es neue Updates gibt
+            const checkNewUpdates = () => {
+                if (!firstUpdateItem || !updateBadge) return; // Sicherheitscheck
+
+                const firstUpdateDateSpan = firstUpdateItem.querySelector('.text-sm.text-gray-500');
+                if (!firstUpdateDateSpan) return;
+                
+                const currentLatestUpdateId = firstUpdateDateSpan.textContent.trim();
+                const seenUpdateId = localStorage.getItem(LATEST_UPDATE_SEEN_KEY);
+
+                if (currentLatestUpdateId !== seenUpdateId) {
+                    updateBadge.classList.remove('hidden');
+                    updateBadge.classList.add('pulsing'); // NEU: Animation starten
+                }
+            };
+            // --- ENDE NEUE LOGIK ---
 
             if (updatesTriggerButton && updatesContainer && closeUpdatesWidget) {
                 const openUpdatesModal = () => {
                     updatesContainer.classList.add('active');
-                    lucide.createIcons(); // Re-render icons in modal
+                    lucide.createIcons();
+                    // --- NEU: Beim Öffnen als gesehen markieren ---
+                    markUpdatesAsSeen();
                 }
                 const closeUpdatesModal = () => updatesContainer.classList.remove('active');
 
@@ -1054,7 +1118,7 @@
                 closeUpdatesWidget.addEventListener('click', closeUpdatesModal);
 
                 updatesContainer.addEventListener('click', (e) => {
-                    if (e.target === updatesContainer) { // only close if clicking on the backdrop
+                    if (e.target === updatesContainer) {
                         closeUpdatesModal();
                     }
                 });
@@ -1092,20 +1156,18 @@
                 feedbackContainer.classList.remove('active'); 
                 setTimeout(() => {
                     showView(viewMain);
-                     // Reset file previews on close
                     document.querySelectorAll('.file-preview-wrapper').forEach(p => {
                         p.innerHTML = '';
                         p.classList.add('hidden');
                     });
                     document.querySelectorAll('.file-drop-zone').forEach(d => d.classList.remove('hidden'));
-
                 }, 300); 
             };
             
             const showView = (viewToShow) => {
                 [viewMain, viewFeedbackForm, viewBugForm, viewConfirmation].forEach(v => v.classList.add('hidden'));
                 viewToShow.classList.remove('hidden');
-                 lucide.createIcons(); // Re-render icons when view changes
+                 lucide.createIcons();
             };
 
             feedbackTriggerButton.addEventListener('click', openWidget);
@@ -1206,7 +1268,7 @@
                             dropZone.classList.add('hidden');
 
                             previewWrapper.querySelector('.file-remove-btn').addEventListener('click', () => {
-                                fileInput.value = ''; // Important for re-uploading the same file
+                                fileInput.value = '';
                                 previewWrapper.innerHTML = '';
                                 previewWrapper.classList.add('hidden');
                                 dropZone.classList.remove('hidden');
@@ -1231,7 +1293,11 @@
                 }
             });
             // --- END: FEEDBACK SYSTEM LOGIC ---
+            
+            // Prüfe auf neue Updates beim Seitenladen
+            checkNewUpdates();
         });
     </script>
 </body>
 </html>
+
