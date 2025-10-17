@@ -19,7 +19,7 @@
         /* THEME VARIABLES */
         :root {
             --bg-color: #f0f4f8;
-            --card-bg-color: rgba(255, 255, 255, 0.6);
+            --card-bg-color: rgba(255, 255, 255, 0.85); /* Made it whiter */
             --text-primary: #1e293b;
             --text-secondary: #475569;
             --border-color: rgba(203, 213, 225, 0.5);
@@ -32,6 +32,7 @@
             --aurora-3: #4ade80; /* Green-400 */
             --shadow-color: rgba(30, 41, 59, 0.1);
             --icon-color: #64748b;
+            --input-bg-color: rgba(0, 0, 0, 0.05);
         }
 
         .dark-mode {
@@ -49,6 +50,7 @@
             --aurora-3: #84cc16; /* Lime-500 */
             --shadow-color: rgba(0, 0, 0, 0.2);
             --icon-color: #94a3b8;
+            --input-bg-color: rgba(255, 255, 255, 0.1);
         }
         
         /* BASE & FONTS */
@@ -163,7 +165,7 @@
         }
 
         #day-inputs-grid textarea {
-            background-color: rgba(0,0,0,0.1);
+            background-color: var(--input-bg-color);
             border: 1px solid var(--border-color);
             color: var(--text-primary);
         }
@@ -361,6 +363,16 @@
             opacity: 0;
             transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
+        
+        /* FIX: Ensure correct text colors in updates modal for both themes */
+        #updates-widget h2,
+        #updates-widget h3 {
+            color: var(--text-primary);
+        }
+        #updates-widget p,
+        #updates-widget .update-item .text-sm {
+            color: var(--text-secondary);
+        }
         /* --- END: UPDATES MODAL STYLES --- */
 
         /* --- START: FEEDBACK SYSTEM STYLES --- */
@@ -371,20 +383,16 @@
             z-index: 1000;
         }
         
-        /* NEU: Feedback Container (Hintergrund & Zentrierung) */
         #feedback-container {
             position: fixed;
             inset: 0;
-            z-index: 1001; /* Höher als der Trigger-Button (1000) */
+            z-index: 1001; 
             display: flex;
             align-items: center;
             justify-content: center;
             background-color: rgba(0, 0, 0, 0.4);
-            
-            /* DER GEWÜNSCHTE BLUR-EFFEKT */
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px); 
-
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.3s ease, visibility 0s 0.3s;
@@ -394,15 +402,12 @@
             visibility: visible;
             transition: opacity 0.3s ease;
         }
-        /* Steuert die Animation des Widgets (wie beim Updates-Widget) */
         #feedback-container.active #feedback-widget {
             transform: scale(1) translateY(0);
             opacity: 1;
         }
         
-        /* ANGEPASST: Das Widget selbst ist nicht mehr fixiert */
         .feedback-widget {
-            /* BEIBEHALTEN: */
             width: 380px;
             max-width: 90vw;
             border-radius: 1rem;
@@ -412,22 +417,17 @@
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--border-color);
-            
-            /* GEÄNDERT/NEU (für die Animation): */
-            position: relative; /* Wichtig für den Close-Button */
+            position: relative; 
             transform: scale(0.95) translateY(10px);
             opacity: 0;
             transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
-        /* Die .feedback-widget.active Klasse wird nicht mehr benötigt */
-
 
         /* Text color overrides for feedback widget */
         .feedback-widget h2,
         .feedback-widget .font-semibold {
             color: var(--text-primary);
         }
-
         .feedback-widget p,
         .feedback-widget label,
         .feedback-widget .text-sm:not(.font-semibold) {
@@ -484,31 +484,27 @@
             border-color: var(--accent-color);
             background-color: rgba(0,0,0,0.05);
         }
-
-        /* DIESEN BLOCK ANPASSEN/ERSETZEN (ca. Zeile 416) */
-        /* Überschreibt Hover/Dragover-Stile NUR für Bug-Formular Drop-Zone */
+        
         #view-bug-form .bug-file-upload-area .file-drop-zone:hover,
         #view-bug-form .bug-file-upload-area .file-drop-zone.dragover {
-            border-color: var(--error-color); /* Setzt Hover/Dragover-Rahmen auf Rot */
-            background-color: rgba(239, 68, 68, 0.05); /* Optional: Leichter roter Hintergrund beim Hovern/Dragover */
+            border-color: var(--error-color);
+            background-color: rgba(239, 68, 68, 0.05);
         }
 
-        /* FIX: Textfarbe für Feedback/Bug-Formular-Felder im Light Mode setzen */
         #view-feedback-form input[type="email"],
         #view-feedback-form textarea,
         #view-bug-form input[type="text"],
         #view-bug-form input[type="email"],
         #view-bug-form textarea {
-            color: var(--text-primary); /* Setzt Textfarbe auf die primäre Textfarbe (dunkel) */
+            color: var(--text-primary);
         }
 
-        /* Stellt sicher, dass die Dark-Mode-Farbe weiterhin funktioniert */
         .dark-mode #view-feedback-form input[type="email"],
         .dark-mode #view-feedback-form textarea,
         .dark-mode #view-bug-form input[type="text"],
         .dark-mode #view-bug-form input[type="email"],
         .dark-mode #view-bug-form textarea {
-            color: var(--text-primary); /* Im Dark Mode ist --text-primary hell (#e2e8f0) */
+            color: var(--text-primary);
         }
 
         .file-preview-container {
@@ -669,7 +665,7 @@
                         <span class="text-sm text-gray-500 dark:text-gray-400">17. Okt. 2025</span>
                     </div>
                     <p class="text-gray-600 dark:text-gray-300 ml-4 pl-5 border-l-2 border-gray-200 dark:border-gray-700">
-                        Ein komplett neues Feedback-System wurde links unten hinzugefügt! Jetzt kannst Du direkt aus der App heraus Ideen vorschlagen oder Bugs melden. Hilf mit, die App noch besser zu machen.
+                        Ein komplett neues Feedback-System wurde links unten hinzugefügt! Jetzt können Sie direkt aus der App heraus Ideen vorschlagen oder Bugs melden. Helfen Sie mit, die App noch besser zu machen.
                     </p>
                 </div>
                  <!-- Update Item 2 -->
@@ -680,7 +676,7 @@
                          <span class="text-sm text-gray-500 dark:text-gray-400">15. Okt. 2025</span>
                     </div>
                     <p class="text-gray-600 dark:text-gray-300 ml-4 pl-5 border-l-2 border-gray-200 dark:border-gray-700">
-                        Das zugrundeliegende KI-Modell wurde aktualisiert, um noch präzisere und stilistisch bessere Berichtstexte zu generieren. COMMING SOON !
+                        Das zugrundeliegende KI-Modell wurde aktualisiert, um noch präzisere und stilistisch bessere Berichtstexte zu generieren. Die Ergebnisse werden dadurch noch präziser.
                     </p>
                 </div>
                  <!-- Update Item 3 -->
@@ -719,13 +715,13 @@
             </button>
             <div id="view-main" class="p-6">
                 <h2 class="font-display text-xl font-semibold mb-1">Wie kann Ich helfen?</h2>
-                <p class="mb-6">Wähle eine der folgenden Optionen.</p>
+                <p class="mb-6">Wählen Sie eine der folgenden Optionen.</p>
                 <div class="space-y-3">
                     <button id="action-give-feedback" class="feedback-action-btn group w-full text-left p-4 hover:bg-green-500/10 dark:hover:bg-green-500/10 border-2 border-transparent hover:border-green-500/20 dark:hover:border-green-500/30 rounded-lg transition-all flex items-center gap-4">
                         <div class="bg-green-100 dark:bg-green-900/50 group-hover:bg-green-200 dark:group-hover:bg-green-900/80 rounded-lg p-2 transition-colors"><i data-lucide="lightbulb" class="w-6 h-6 text-green-600"></i></div>
                         <div class="flex-1">
                             <span class="font-semibold">Feedback geben</span>
-                            <p class="text-sm">Teile mir deine Ideen mit.</p>
+                            <p class="text-sm">Teilen Sie mir Ihre Ideen mit.</p>
                         </div>
                         <i data-lucide="chevron-right" class="w-5 h-5 text-gray-400 group-hover:text-green-600 transition-transform group-hover:translate-x-1"></i>
                     </button>
@@ -733,7 +729,7 @@
                          <div class="bg-red-100 dark:bg-red-900/50 group-hover:bg-red-200 dark:group-hover:bg-red-900/80 rounded-lg p-2 transition-colors"><i data-lucide="bug" class="w-6 h-6 text-red-600"></i></div>
                          <div class="flex-1">
                             <span class="font-semibold">Bug melden</span>
-                            <p class="text-sm">Helfe mir, Probleme zu beheben.</p>
+                            <p class="text-sm">Helfen Sie mir, Probleme zu beheben.</p>
                         </div>
                          <i data-lucide="chevron-right" class="w-5 h-5 text-gray-400 group-hover:text-red-600 transition-transform group-hover:translate-x-1"></i>
                     </button>
@@ -748,7 +744,7 @@
                         <div> <label class="category-button active"><input type="radio" name="category" value="suggestion" class="sr-only" checked>Vorschlag</label>
                             </div>
                     </div>
-                    <div><textarea name="Feedback-Nachchricht" class="w-full h-28 p-3 border border-gray-300 dark:border-slate-600 bg-white dark:bg-transparent text-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none resize-none focus:ring-2 focus:ring-green-500" placeholder="Teile mir deine Gedanken mit..."></textarea></div>
+                    <div><textarea name="Feedback-Nachricht" class="w-full h-28 p-3 border border-gray-300 dark:border-slate-600 bg-white dark:bg-transparent text-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none resize-none focus:ring-2 focus:ring-green-500" placeholder="Teilen Sie mir Ihre Gedanken mit..."></textarea></div>
                     
                     <!-- Screenshot Upload Area -->
                     <div class="feedback-file-upload-area">
@@ -774,7 +770,7 @@
                     <div><label for="bug-summary" class="block text-sm font-medium">Zusammenfassung</label><input type="text" name="Bug-Zusammenfassung" id="bug-summary" class="mt-1 w-full p-3 border border-gray-300 dark:border-slate-600 bg-white dark:bg-transparent text-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="z.B. Button funktioniert nicht"></div>
                     <div>
                         <label class="block text-sm font-medium">Schritte zur Reproduktion</label>
-                     <textarea name="Schritte-zur-Reproduktion" class="w-full h-28 p-3 border border-gray-300 dark:border-slate-600 bg-white dark:bg-transparent text-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500 resize-none" placeholder="Bitte beschreibe den Fehler..."></textarea>   
+                     <textarea name="Schritte-zur-Reproduktion" class="w-full h-28 p-3 border border-gray-300 dark:border-slate-600 bg-white dark:bg-transparent text-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500 resize-none" placeholder="Bitte beschreiben Sie den Fehler..."></textarea>   
                     </div>
                     
                      <!-- Screenshot Upload Area -->
@@ -1023,16 +1019,16 @@
             const currentTheme = localStorage.getItem('theme');
 
             if (currentTheme === 'dark') {
-                htmlEl.classList.add('dark-mode');
+                document.body.classList.add('dark-mode');
                 sunIcon.classList.add('hidden');
                 moonIcon.classList.remove('hidden');
             }
 
             themeToggle.addEventListener('click', () => {
-                htmlEl.classList.toggle('dark-mode');
+                document.body.classList.toggle('dark-mode');
                 sunIcon.classList.toggle('hidden');
                 moonIcon.classList.toggle('hidden');
-                let theme = htmlEl.classList.contains('dark-mode') ? 'dark' : 'light';
+                let theme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
                 localStorage.setItem('theme', theme);
             });
 
@@ -1076,7 +1072,7 @@
             // --- START: FEEDBACK SYSTEM LOGIC (ANGEPASST) ---
             // -----------------------------------------------------------------
             const feedbackTriggerButton = document.getElementById('feedback-trigger-button');
-            const feedbackContainer = document.getElementById('feedback-container'); // NEU
+            const feedbackContainer = document.getElementById('feedback-container'); 
             const feedbackWidget = document.getElementById('feedback-widget');
             const closeWidgetButton = document.getElementById('close-widget-button');
             const viewMain = document.getElementById('view-main');
@@ -1091,9 +1087,9 @@
             const doneButton = document.getElementById('done-button');
             const categoryButtons = document.querySelectorAll('.category-button');
 
-            const openWidget = () => feedbackContainer.classList.add('active'); // Geändert
+            const openWidget = () => feedbackContainer.classList.add('active');
             const closeWidget = () => {
-                feedbackContainer.classList.remove('active'); // Geändert
+                feedbackContainer.classList.remove('active'); 
                 setTimeout(() => {
                     showView(viewMain);
                      // Reset file previews on close
@@ -1103,7 +1099,7 @@
                     });
                     document.querySelectorAll('.file-drop-zone').forEach(d => d.classList.remove('hidden'));
 
-                }, 300); // Angepasst
+                }, 300); 
             };
             
             const showView = (viewToShow) => {
@@ -1118,9 +1114,8 @@
             actionReportBug.addEventListener('click', () => showView(viewBugForm));
             backButtons.forEach(button => button.addEventListener('click', () => showView(viewMain)));
             
-            // --- START: Angepasste Formular-Übermittlung ---
             async function handleFormSubmit(event) {
-                event.preventDefault(); // Standard-Formularsendung verhindern
+                event.preventDefault(); 
                 const form = event.target;
                 const data = new FormData(form);
                 
@@ -1129,14 +1124,13 @@
                         method: form.method,
                         body: data,
                         headers: {
-                            'Accept': 'application/json' // Formspree empfiehlt dies für AJAX-Anfragen
+                            'Accept': 'application/json' 
                         }
                     });
 
                     if (response.ok) {
                         showView(viewConfirmation);
-                        form.reset(); // Formularfelder leeren
-                        // Auch die Dateivorschau zurücksetzen
+                        form.reset();
                         const previewWrapper = form.querySelector('.file-preview-wrapper');
                         const dropZone = form.querySelector('.file-drop-zone');
                         if (previewWrapper && dropZone) {
@@ -1145,12 +1139,12 @@
                              dropZone.classList.remove('hidden');
                         }
                     } else {
-                        console.error('Formular-Übermittlung fehlgeschlagen', await response.json());
-                        alert('Fehler beim Senden. Bitte versuchen Sie es erneut.');
+                        console.error('Form submission failed', await response.json());
+                        alert('Error sending form. Please try again.');
                     }
                 } catch (error) {
-                    console.error('Netzwerkfehler:', error);
-                    alert('Fehler beim Senden. Bitte prüfen Sie Ihre Internetverbindung.');
+                    console.error('Network error:', error);
+                    alert('Error sending form. Please check your connection.');
                 }
             }
 
@@ -1231,7 +1225,7 @@
                 const isClickInsideWidget = feedbackWidget.contains(event.target);
                 const isClickOnButton = feedbackTriggerButton.contains(event.target);
                 if (!isClickInsideWidget && !isClickOnButton) {
-                    if (feedbackContainer.classList.contains('active')) { // Geändert
+                    if (feedbackContainer.classList.contains('active')) {
                        closeWidget();
                     }
                 }
