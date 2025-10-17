@@ -681,7 +681,10 @@
             <button id="close-updates-widget" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors">
                 <i data-lucide="x" class="w-6 h-6"></i>
             </button>
-            <h2 class="font-display text-2xl md:text-3xl font-bold mb-4 text-center">Neuste Updates</h2>
+            <div class="text-center mb-4">
+             <h2 class="font-display text-2xl md:text-3xl font-bold mb-1">Neuste Updates</h2>
+                <span id="app-version" class="text-sm font-medium" style="color: var(--text-secondary);">v1.0</span> 
+                </div>
             <div id="updates-content" class="flex-grow overflow-y-auto pr-4 space-y-6">
                 <!-- Update Item 1 -->
                 <div class="update-item">
@@ -702,8 +705,9 @@
                          <span class="text-sm text-gray-500 dark:text-gray-400">17. Okt. 2025</span>
                     </div>
                     <p class="text-gray-600 dark:text-gray-300 ml-4 pl-5 border-l-2 border-gray-200 dark:border-gray-700">
-                        Das zugrundeliegende KI-Modell wurde aktualisiert, um noch präzisere, längere und stilistisch bessere Berichtstexte zu generieren. Feedback gewünscht !
-                    </p>
+    Das zugrundeliegende KI-Modell wurde aktualisiert, um noch präzisere, längere und stilistisch bessere Berichtstexte zu generieren.
+    <span class="font-semibold text-red-500 dark:text-red-400">Feedback gewünscht !</span>
+</p>
                 </div>
                  <!-- Update Item 3 -->
                 <div class="update-item">
@@ -1070,39 +1074,45 @@
             const closeUpdatesWidget = document.getElementById('close-updates-widget');
             
             // --- NEU: LOGIK FÜR "NEU"-BADGE ---
-            const LATEST_UPDATE_SEEN_KEY = 'latestUpdateSeen'; // Key für localStorage
+            const LATEST_VERSION_SEEN_KEY = 'latestVersionSeen'; // NEUER Key für localStorage
             const updateBadge = document.getElementById('update-new-badge');
-            const firstUpdateItem = document.querySelector('#updates-content .update-item');
+
 
             // Funktion, um das "Gesehen"-Datum zu speichern und Badge zu verstecken
             const markUpdatesAsSeen = () => {
-                if (!firstUpdateItem || !updateBadge) return; // Sicherheitscheck
+            // NEU: Lese die Versionsnummer aus dem neuen Span
+            const appVersionSpan = document.getElementById('app-version');
+            if (!appVersionSpan || !updateBadge) return; // Sicherheitscheck
 
-                const firstUpdateDateSpan = firstUpdateItem.querySelector('.text-sm.text-gray-500');
-                
-                if (firstUpdateDateSpan) {
-                    const currentLatestUpdateId = firstUpdateDateSpan.textContent.trim();
-                    localStorage.setItem(LATEST_UPDATE_SEEN_KEY, currentLatestUpdateId);
-                }
-                updateBadge.classList.add('hidden');
-                updateBadge.classList.remove('pulsing'); // NEU: Animation stoppen
-            };
+            const currentVersion = appVersionSpan.textContent.trim();
+            if (currentVersion) {
+            // NEU: Verwende den neuen localStorage Key
+            localStorage.setItem(LATEST_VERSION_SEEN_KEY, currentVersion);
+            }
+
+    updateBadge.classList.add('hidden');
+    updateBadge.classList.remove('pulsing'); // Animation stoppen
+};
 
             // Funktion, um beim Laden der Seite zu prüfen, ob es neue Updates gibt
-            const checkNewUpdates = () => {
-                if (!firstUpdateItem || !updateBadge) return; // Sicherheitscheck
+const checkNewUpdates = () => {
+    // NEU: Lese die Versionsnummer aus dem neuen Span
+    const appVersionSpan = document.getElementById('app-version');
+    if (!appVersionSpan || !updateBadge) return; // Sicherheitscheck
 
-                const firstUpdateDateSpan = firstUpdateItem.querySelector('.text-sm.text-gray-500');
-                if (!firstUpdateDateSpan) return;
-                
-                const currentLatestUpdateId = firstUpdateDateSpan.textContent.trim();
-                const seenUpdateId = localStorage.getItem(LATEST_UPDATE_SEEN_KEY);
+    const currentVersion = appVersionSpan.textContent.trim();
+    if (!currentVersion) return; // Beenden, falls keine Version gefunden wurde
 
-                if (currentLatestUpdateId !== seenUpdateId) {
-                    updateBadge.classList.remove('hidden');
-                    updateBadge.classList.add('pulsing'); // NEU: Animation starten
-                }
-            };
+    // NEU: Verwende den neuen localStorage Key
+    const seenVersion = localStorage.getItem(LATEST_VERSION_SEEN_KEY);
+
+    // Vergleiche die aktuelle Version im Code mit der zuletzt gesehenen
+    if (currentVersion !== seenVersion) {
+        updateBadge.classList.remove('hidden');
+        updateBadge.classList.add('pulsing'); // Animation starten
+    }
+};
+
             // --- ENDE NEUE LOGIK ---
 
             if (updatesTriggerButton && updatesContainer && closeUpdatesWidget) {
