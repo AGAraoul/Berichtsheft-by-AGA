@@ -1,0 +1,566 @@
+/* THEME VARIABLES */
+:root {
+    --bg-color: #f0f4f8;
+    --card-bg-color: rgba(255, 255, 255, 0.85); /* Made it whiter */
+    --text-primary: #1e293b;
+    --text-secondary: #475569;
+    --border-color: rgba(203, 213, 225, 0.5);
+    --accent-color: #16a34a; /* Green-600 */
+    --accent-hover: #15803d; /* Green-700 */
+    --error-color: #ef4444;
+    --error-bg-color: rgba(239, 68, 68, 0.1);
+    --aurora-1: #22c55e; /* Green-500 */
+    --aurora-2: #84cc16; /* Lime-500 */
+    --aurora-3: #4ade80; /* Green-400 */
+    --shadow-color: rgba(30, 41, 59, 0.1);
+    --icon-color: #64748b;
+    --input-bg-color: rgba(0, 0, 0, 0.05);
+}
+
+.dark-mode {
+    --bg-color: #0d1117;
+    --card-bg-color: rgba(22, 27, 34, 0.5);
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --border-color: rgba(55, 65, 81, 0.5);
+    --accent-color: #22c55e; /* Green-500 */
+    --accent-hover: #4ade80; /* Green-400 */
+    --error-color: #f87171;
+    --error-bg-color: rgba(248, 113, 113, 0.1);
+    --aurora-1: #16a34a; /* Green-600 */
+    --aurora-2: #15803d; /* Green-700 */
+    --aurora-3: #84cc16; /* Lime-500 */
+    --shadow-color: rgba(0, 0, 0, 0.2);
+    --icon-color: #94a3b8;
+    --input-bg-color: rgba(255, 255, 255, 0.1);
+}
+
+/* BASE & FONTS */
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    transition: background-color 0.5s ease, color 0.5s ease;
+    overflow: hidden;
+}
+h1, h2, h3, .font-display {
+    font-family: 'Poppins', sans-serif;
+}
+
+/* AURORA BACKGROUND */
+.aurora-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+    filter: blur(100px);
+}
+.aurora-shape {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.3;
+    animation: moveAurora 25s infinite alternate ease-in-out;
+}
+.aurora-1 { background-color: var(--aurora-1); width: 400px; height: 400px; top: 10%; left: 10%; animation-duration: 20s; }
+.aurora-2 { background-color: var(--aurora-2); width: 500px; height: 500px; top: 50%; left: 60%; animation-duration: 25s; }
+.aurora-3 { background-color: var(--aurora-3); width: 350px; height: 350px; top: 80%; left: 20%; animation-duration: 30s; }
+
+@keyframes moveAurora {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(100px, 50px) scale(1.2); }
+    100% { transform: translate(-50px, -100px) scale(1); }
+}
+
+/* CARD & LAYOUT */
+.glass-card {
+    background-color: var(--card-bg-color);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 8px 32px 0 var(--shadow-color);
+    transition: background-color 0.5s ease, border-color 0.5s ease;
+}
+
+/* TRANSITIONS FOR STEPS */
+.step {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out, visibility 0s 0.5s;
+}
+.step.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+/* CUSTOM COMPONENTS */
+.gender-btn {
+    border: 2px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+.gender-btn:hover {
+    border-color: var(--accent-color);
+    transform: translateY(-4px);
+}
+.gender-btn.active {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: white;
+}
+.gender-btn.active .icon {
+    color: white !important;
+}
+
+.main-btn {
+    background-color: var(--accent-color);
+    color: white;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px -2px rgba(0,0,0,0.1);
+}
+.main-btn:hover {
+    background-color: var(--accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px -2px rgba(0,0,0,0.15);
+}
+.main-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.secondary-btn {
+     background-color: transparent;
+     color: var(--text-secondary);
+     transition: all 0.3s ease;
+}
+.secondary-btn:hover {
+    color: var(--text-primary);
+}
+
+#day-inputs-grid textarea {
+    background-color: var(--input-bg-color);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+#day-inputs-grid textarea:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px var(--accent-color);
+    background-color: transparent;
+}
+
+/* LOADER ANIMATION */
+.loader {
+    width: 60px;
+    height: 60px;
+    border: 5px solid var(--border-color);
+    border-bottom-color: var(--accent-color);
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+}
+
+/* NEU: Kleinerer Loader für Regenerate-Button */
+.loader-small {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--border-color);
+    border-bottom-color: var(--accent-color);
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 0.8s linear infinite;
+}
+
+@keyframes rotation {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* RESULT CARD ANIMATION */
+.result-card {
+    opacity: 0;
+    transform: scale(0.95);
+    animation: popIn 0.5s ease-out forwards;
+}
+@keyframes popIn { 
+    to { opacity: 1; transform: scale(1); }
+}
+
+.copy-btn, .regenerate-btn {
+    background-color: var(--card-bg-color);
+    border: 1px solid var(--border-color);
+    transition: all 0.2s ease;
+    color: var(--icon-color);
+}
+ .copy-btn:hover, .regenerate-btn:hover {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: white;
+}
+.copy-btn.copied {
+    background-color: #10b981;
+    border-color: #10b981;
+    color: white;
+}
+
+/* NEU: Stile für Regenerate-Button */
+.regenerate-btn:hover {
+     transform: rotate(90deg);
+}
+.regenerate-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    background-color: var(--card-bg-color);
+    border-color: var(--border-color);
+    color: var(--icon-color);
+}
+
+
+/* Error Message */
+.error-message {
+    background-color: var(--error-bg-color);
+    color: var(--error-color);
+    transition: all 0.3s ease;
+}
+
+/* Custom Scrollbar */
+#day-inputs-grid::-webkit-scrollbar,
+#report-output::-webkit-scrollbar,
+#updates-content::-webkit-scrollbar {
+    width: 10px;
+}
+#day-inputs-grid::-webkit-scrollbar-track,
+#report-output::-webkit-scrollbar-track,
+#updates-content::-webkit-scrollbar-track {
+    background: transparent;
+    margin-block: 5px;
+}
+#day-inputs-grid::-webkit-scrollbar-thumb,
+#report-output::-webkit-scrollbar-thumb,
+#updates-content::-webkit-scrollbar-thumb {
+    background-color: var(--accent-color);
+    border-radius: 10px;
+    border: 2px solid var(--bg-color);
+}
+#day-inputs-grid::-webkit-scrollbar-thumb:hover,
+#report-output::-webkit-scrollbar-thumb:hover,
+#updates-content::-webkit-scrollbar-thumb:hover {
+    background-color: var(--accent-hover);
+}
+
+/* Shimmer Animation for H1 */
+.shimmer-h1 {
+    background: linear-gradient(
+        90deg,
+        var(--text-primary) 25%,
+        #ffffff 50%,
+        var(--text-primary) 75%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shimmer-text 4s linear infinite;
+    animation-delay: 2s;
+}
+
+.dark-mode .shimmer-h1 {
+     background: linear-gradient(
+        90deg,
+        var(--text-secondary) 25%,
+        #ffffff 50%,
+        var(--text-secondary) 75%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+@keyframes shimmer-text {
+    to {
+        background-position: -200% center;
+    }
+}
+
+/* --- START: INTERACTIVE BUTTON & WIDGETS --- */
+.interactive-button {
+    position: relative;
+    width: 8rem;
+    cursor: pointer;
+    overflow: hidden;
+    border-radius: 9999px;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-bg-color);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: 0.5rem;
+    text-align: center;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.interactive-button .text-initial {
+    display: inline-block;
+    transform: translateX(0.25rem);
+    transition: all 0.3s;
+    position: relative;
+    z-index: 10;
+}
+.interactive-button:hover .text-initial {
+    transform: translateX(3rem);
+    opacity: 0;
+}
+.interactive-button .text-hover {
+    position: absolute; top: 0; z-index: 10; display: flex; height: 100%;
+    width: 100%; transform: translateX(3rem); align-items: center;
+    justify-content: center; gap: 0.5rem; color: white;
+    opacity: 0; transition: all 0.3s;
+}
+.interactive-button:hover .text-hover {
+    transform: translateX(-0.25rem);
+    opacity: 1;
+}
+.interactive-button .background-fill {
+    position: absolute; left: 10%; 
+    top: 40%; height: 0.5rem;
+    width: 0.5rem; transform: scale(1); border-radius: 0.5rem;
+    background-color: var(--accent-color);
+    transition: all 0.3s;
+}
+.interactive-button:hover .background-fill {
+    left: 0%; top: 0%; height: 100%; width: 100%; transform: scale(1.8);
+}
+
+/* --- START: UPDATES MODAL STYLES --- */
+#updates-container {
+    position: fixed;
+    inset: 0;
+    z-index: 1001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px); /* Für Safari-Kompatibilität */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0s 0.3s;
+}
+#updates-container.active {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s ease;
+}
+#updates-container.active #updates-widget {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+#updates-widget {
+    transform: scale(0.95) translateY(10px);
+    opacity: 0;
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* FIX: Ensure correct text colors in updates modal for both themes */
+#updates-widget h2,
+#updates-widget h3 {
+    color: var(--text-primary);
+}
+#updates-widget p,
+#updates-widget .update-item .text-sm {
+    color: var(--text-secondary);
+}
+/* --- END: UPDATES MODAL STYLES --- */
+
+/* --- START: FEEDBACK SYSTEM STYLES --- */
+.feedback-button-container {
+    position: fixed;
+    bottom: 2rem;
+    left: 2rem; /* POSITIONED LEFT */
+    z-index: 1000;
+}
+
+#feedback-container {
+    position: fixed;
+    inset: 0;
+    z-index: 1001; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px); 
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0s 0.3s;
+}
+#feedback-container.active {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s ease;
+}
+#feedback-container.active #feedback-widget {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+.feedback-widget {
+    width: 380px;
+    max-width: 90vw;
+    border-radius: 1rem;
+    box-shadow: 0 8px 32px 0 var(--shadow-color);
+    overflow: hidden;
+    background-color: var(--card-bg-color);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-color);
+    position: relative; 
+    transform: scale(0.95) translateY(10px);
+    opacity: 0;
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Text color overrides for feedback widget */
+.feedback-widget h2,
+.feedback-widget .font-semibold {
+    color: var(--text-primary);
+}
+.feedback-widget p,
+.feedback-widget label,
+.feedback-widget .text-sm:not(.font-semibold) {
+    color: var(--text-secondary);
+}
+
+.feedback-action-btn { 
+     background-color: rgba(255, 255, 255, 0.4);
+}
+.dark-mode .feedback-action-btn {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.category-button {
+    display: block; text-align: center; padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem; background-color: rgba(255, 255, 255, 0.4);
+    color: var(--text-secondary);
+    font-weight: 500; font-size: 0.875rem; cursor: pointer;
+    border: 1px solid transparent; transition: all 0.2s ease-in-out;
+}
+.dark-mode .category-button {
+     background-color: rgba(0, 0, 0, 0.2);
+}
+.category-button:hover { background-color: rgba(255, 255, 255, 0.6); }
+.dark-mode .category-button:hover {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+.category-button.active {
+    background-color: var(--accent-color);
+    color: white; 
+    border-color: var(--accent-color);
+}
+.sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0;
+    margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0);
+    white-space: nowrap; border-width: 0;
+}
+
+/* NEW: File Upload Styles */
+.file-drop-zone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    border: 2px dashed var(--border-color);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    color: var(--text-secondary);
+}
+.file-drop-zone:hover, .file-drop-zone.dragover {
+    border-color: var(--accent-color);
+    background-color: rgba(0,0,0,0.05);
+}
+
+#view-bug-form .bug-file-upload-area .file-drop-zone:hover,
+#view-bug-form .bug-file-upload-area .file-drop-zone.dragover {
+    border-color: var(--error-color);
+    background-color: rgba(239, 68, 68, 0.05);
+}
+
+#view-feedback-form input[type="email"],
+#view-feedback-form textarea,
+#view-bug-form input[type="text"],
+#view-bug-form input[type="email"],
+#view-bug-form textarea {
+    color: var(--text-primary);
+}
+
+.dark-mode #view-feedback-form input[type="email"],
+.dark-mode #view-feedback-form textarea,
+.dark-mode #view-bug-form input[type="text"],
+.dark-mode #view-bug-form input[type="email"],
+.dark-mode #view-bug-form textarea {
+    color: var(--text-primary);
+}
+
+.file-preview-container {
+    position: relative;
+    width: 100px;
+    height: 100px;
+}
+.file-preview-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color);
+}
+.file-remove-btn {
+    position: absolute;
+    top: -0.5rem;
+    right: -0.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 99px;
+    background-color: var(--text-primary);
+    color: var(--bg-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 2px solid var(--bg-color);
+}
+/* --- END: FEEDBACK SYSTEM STYLES --- */
+
+/* NEU: Animation für Update-Badge */
+@keyframes pulse-red {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); /* Corresponds to red-600 */
+    }
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 10px rgba(220, 38, 38, 0);
+    }
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(220, 38, 38, 0);
+    }
+}
+#update-new-badge.pulsing {
+    animation: pulse-red 1.5s infinite;
+}
