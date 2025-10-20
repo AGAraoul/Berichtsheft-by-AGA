@@ -187,6 +187,19 @@
             box-sizing: border-box;
             animation: rotation 1s linear infinite;
         }
+
+        /* NEU: Kleinerer Loader für Regenerate-Button */
+        .loader-small {
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--border-color);
+            border-bottom-color: var(--accent-color);
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 0.8s linear infinite;
+        }
+
         @keyframes rotation {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -202,12 +215,13 @@
             to { opacity: 1; transform: scale(1); }
         }
         
-        .copy-btn {
+        .copy-btn, .regenerate-btn {
             background-color: var(--card-bg-color);
             border: 1px solid var(--border-color);
             transition: all 0.2s ease;
+            color: var(--icon-color);
         }
-         .copy-btn:hover {
+         .copy-btn:hover, .regenerate-btn:hover {
             background-color: var(--accent-color);
             border-color: var(--accent-color);
             color: white;
@@ -217,6 +231,20 @@
             border-color: #10b981;
             color: white;
         }
+
+        /* NEU: Stile für Regenerate-Button */
+        .regenerate-btn:hover {
+             transform: rotate(90deg);
+        }
+        .regenerate-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            background-color: var(--card-bg-color);
+            border-color: var(--border-color);
+            color: var(--icon-color);
+        }
+
 
         /* Error Message */
         .error-message {
@@ -568,7 +596,6 @@
     <!-- Header with Buttons -->
     <header class="fixed top-4 left-4 right-4 z-50 flex items-center justify-between">
         <!-- Left Side: Updates Button -->
-        <!-- NEU: Wrapper, um das Badge außerhalb des Buttons positionieren zu können -->
         <div class="relative">
             <button id="updates-trigger-button" class="interactive-button">
                 <span class="text-initial">Updates</span>
@@ -578,7 +605,6 @@
                 </div>
                 <div class="background-fill"></div>
             </button>
-            <!-- Das "NEU"-Badge wurde hierher verschoben und angepasst -->
             <span id="update-new-badge" class="hidden absolute -top-1 -right-2 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
                 NEU
             </span>
@@ -590,9 +616,7 @@
                 <svg id="theme-icon-sun" class="h-6 w-6" style="color: var(--icon-color);" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
                 <svg id="theme-icon-moon" class="h-6 w-6 hidden" style="color: var(--icon-color);" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
             </button>
-            <!-- Schaeffler Logo -->
             <div class="flex items-center justify-center h-12 w-auto p-2">
-                <!-- Replace with correct path to your logo if needed -->
                 <img src="schaeffler-logo.svg" alt="Schaeffler Logo" class="h-8">
             </div>
         </div>
@@ -683,7 +707,7 @@
             </button>
             <div class="text-center mb-4">
              <h2 class="font-display text-2xl md:text-3xl font-bold mb-1">Neuste Updates</h2>
-                <span id="app-version" class="text-sm font-medium" style="color: var(--text-secondary);">v1.0</span> 
+                <span id="app-version" class="text-sm font-medium" style="color: var(--text-secondary);">v1.1</span> 
                 </div>
             <div id="updates-content" class="flex-grow overflow-y-auto pr-4 space-y-6">
                 <!-- Update Item 1 -->
@@ -694,7 +718,7 @@
                         <span class="text-sm text-gray-500 dark:text-gray-400">17. Okt. 2025</span>
                     </div>
                     <p class="text-gray-600 dark:text-gray-300 ml-4 pl-5 border-l-2 border-gray-200 dark:border-gray-700">
-                        Ein komplett neues Feedback-System wurde links unten hinzugefügt! Jetzt kannst Du direkt aus der App heraus Ideen vorschlagen oder Bugs melden.
+                        Ein komplett neues Feedback-System wurde links unten hinzugefügt! Schlage Ideen vor, oder melde Bugs !
                     </p>
                 </div>
                  <!-- Update Item 2 -->
@@ -737,7 +761,6 @@
         </button>
     </div>
 
-    <!-- NEUER CONTAINER FÜR HINTERGRUND & ZENTRIERUNG -->
     <div id="feedback-container" class="fixed inset-0 z-[1001] flex items-center justify-center p-4">
         <div id="feedback-widget" class="feedback-widget">
             <button id="close-widget-button" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors">
@@ -774,9 +797,8 @@
                         <div> <label class="category-button active"><input type="radio" name="category" value="suggestion" class="sr-only" checked>Vorschlag</label>
                             </div>
                     </div>
-                    <div><textarea name="Feedback-Nachricht" class="w-full h-28 p-3 border border-gray-300 dark:border-slate-600 bg-white dark:bg-transparent text-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none resize-none focus:ring-2 focus:ring-green-500" placeholder="Teilen Sie mir Ihre Gedanken mit..."></textarea></div>
+                    <div><textarea name="Feedback-Nachricht" class="w-full h-28 p-3 border border-gray-300 dark:border-slate-600 bg-white dark:bg-transparent text-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none resize-none focus:ring-2 focus:ring-green-500" placeholder="Teile mir Deine Gedanken mit..."></textarea></div>
                     
-                    <!-- Screenshot Upload Area -->
                     <div class="feedback-file-upload-area">
                         <div class="file-drop-zone">
                             <div class="file-drop-zone-text">
@@ -800,10 +822,9 @@
                     <div><label for="bug-summary" class="block text-sm font-medium">Zusammenfassung</label><input type="text" name="Bug-Zusammenfassung" id="bug-summary" class="mt-1 w-full p-3 border border-gray-300 dark:border-slate-600 bg-white dark:bg-transparent text-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="z.B. Button funktioniert nicht"></div>
                     <div>
                         <label class="block text-sm font-medium">Schritte zur Reproduktion</label>
-                     <textarea name="Schritte-zur-Reproduktion" class="w-full h-28 p-3 border border-gray-300 dark:border-slate-600 bg-white dark:bg-transparent text-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500 resize-none" placeholder="Bitte beschreiben Sie den Fehler..."></textarea>   
+                     <textarea name="Schritte-zur-Reproduktion" class="w-full h-28 p-3 border border-gray-300 dark:border-slate-600 bg-white dark:bg-transparent text-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500 resize-none" placeholder="Bitte beschreibe mir den Fehler..."></textarea>   
                     </div>
                     
-                     <!-- Screenshot Upload Area -->
                     <div class="bug-file-upload-area">
                         <div class="file-drop-zone">
                            <div class="file-drop-zone-text">
@@ -839,6 +860,7 @@
                 currentStep: 1,
                 selectedGender: null,
                 days: ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag'],
+                lastInputs: [], // NEU: Speichert die letzten Eingaben für die Regenerierung
             };
 
             // --- DOM ELEMENTS (MAIN APP) ---
@@ -882,20 +904,25 @@
                 });
             };
             
-            async function callGeminiApi(inputs, gender) {
+            // ANGEPASST: Akzeptiert optionalen onProgress-Callback für den Ladebildschirm
+            async function callGeminiApi(inputs, gender, onProgress = null) {
                 const functionUrl = '/.netlify/functions/generate';
-                const loadingMessages = inputs.map((inp, i) => inp ? `Formuliere ${state.days[i]}...` : null).filter(Boolean);
-                loadingMessages.push("Finalisiere Bericht...");
-                let messageIndex = 0;
-                
-                const updateLoadingText = () => {
-                    if(messageIndex < loadingMessages.length) {
-                        loadingStatus.textContent = loadingMessages[messageIndex];
-                        messageIndex++;
-                    }
-                };
-                updateLoadingText();
-                const loadingInterval = setInterval(updateLoadingText, 2000);
+                let loadingInterval;
+
+                if (onProgress) {
+                    const loadingMessages = inputs.map((inp, i) => inp ? `Formuliere ${state.days[i]}...` : null).filter(Boolean);
+                    loadingMessages.push("Finalisiere Bericht...");
+                    let messageIndex = 0;
+                    
+                    const updateLoadingText = () => {
+                        if(messageIndex < loadingMessages.length) {
+                            onProgress(loadingMessages[messageIndex]);
+                            messageIndex++;
+                        }
+                    };
+                    updateLoadingText();
+                    loadingInterval = setInterval(updateLoadingText, 2000);
+                }
                 
                 try {
                     const response = await fetch(functionUrl, {
@@ -908,7 +935,7 @@
                         })
                     });
 
-                    clearInterval(loadingInterval);
+                    if (onProgress) clearInterval(loadingInterval);
 
                     if (!response.ok) {
                         const errorResult = await response.json();
@@ -919,7 +946,7 @@
                     return results;
 
                 } catch (error) {
-                    clearInterval(loadingInterval);
+                    if (onProgress) clearInterval(loadingInterval);
                     console.error("Error calling the Netlify Function:", error);
                     throw error;
                 }
@@ -932,11 +959,13 @@
                      return;
                 }
                 
+                state.lastInputs = inputs; // NEU: Eingaben für später speichern
                 navigateToStep(3);
                 
                 try {
-                    const generatedReports = await callGeminiApi(inputs, state.selectedGender);
-                    displayResults(generatedReports);
+                    const onProgressUpdate = (message) => { loadingStatus.textContent = message; };
+                    const generatedReports = await callGeminiApi(inputs, state.selectedGender, onProgressUpdate);
+                    displayResults(generatedReports, inputs); // ANGEPASST: Übergibt auch die Original-Eingaben
                     navigateToStep(4);
                 } catch (error) {
                     console.error("API call failed:", error);
@@ -945,21 +974,32 @@
                 }
             };
 
-            function displayResults(reports) {
+            // ANGEPASST: Akzeptiert originalInputs, um sie in data-Attributen zu speichern
+            function displayResults(reports, originalInputs) {
                 reportOutput.innerHTML = '';
                 reports.forEach((report, index) => {
                     if (report.text) {
                         const card = document.createElement('div');
-                        card.className = 'result-card glass-card relative p-5 pr-28 rounded-lg';
+                        // NEU: data-Attribute für Index und ursprüngliche Eingabe hinzugefügt
+                        card.className = 'result-card glass-card relative p-5 rounded-lg';
+                        card.dataset.dayIndex = index;
+                        card.dataset.input = originalInputs[index] || '';
                         card.style.animationDelay = `${index * 100}ms`;
+                        
                         const sanitizedText = report.text.replace(/"/g, '&quot;');
                         
+                        // NEU: HTML-Struktur mit Regenerate-Button
                         card.innerHTML = `
                             <h3 class="font-display text-xl font-bold mb-2 text-[var(--accent-color)]">${report.day}</h3>
-                            <p class="leading-relaxed" style="color: var(--text-secondary);">${report.text}</p>
-                            <button class="copy-btn absolute top-4 right-4 text-sm font-semibold py-2 px-3 rounded-md flex items-center gap-1.5" data-copytext="${sanitizedText}">
-                               <i data-lucide="copy" style="width:16px; height: 16px;"></i> <span class="copy-text">Kopieren</span>
-                            </button>
+                            <p id="report-text-${index}" class="leading-relaxed pr-24" style="color: var(--text-secondary);">${report.text}</p>
+                            <div class="absolute top-4 right-4 flex items-center gap-2">
+                                <button title="Neu generieren" class="regenerate-btn p-2 rounded-md">
+                                    <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                                </button>
+                                <button class="copy-btn text-sm font-semibold py-2 px-3 rounded-md flex items-center gap-1.5" data-copytext="${sanitizedText}">
+                                   <i data-lucide="copy" style="width:16px; height: 16px;"></i> <span class="copy-text">Kopieren</span>
+                                </button>
+                            </div>
                         `;
                         reportOutput.appendChild(card);
                     }
@@ -969,6 +1009,7 @@
 
             function resetApp() {
                 state.selectedGender = null;
+                state.lastInputs = [];
                 maleBtn.classList.remove('active');
                 femaleBtn.classList.remove('active');
                 const textareas = document.querySelectorAll('#day-inputs-grid textarea');
@@ -1024,19 +1065,58 @@
             generateBtn.addEventListener('click', handleGenerate);
             resetBtn.addEventListener('click', resetApp);
             
-            reportOutput.addEventListener('click', (e) => {
-                const button = e.target.closest('.copy-btn');
-                if (button) {
-                    const textToCopy = button.dataset.copytext;
+            // ANGEPASST: Event-Delegation für Copy- und Regenerate-Buttons
+            reportOutput.addEventListener('click', async (e) => {
+                const copyButton = e.target.closest('.copy-btn');
+                const regenButton = e.target.closest('.regenerate-btn');
+
+                if (copyButton) {
+                    const textToCopy = copyButton.dataset.copytext;
                     if (navigator.clipboard && window.isSecureContext) {
                         navigator.clipboard.writeText(textToCopy).then(() => {
-                           updateCopyButton(button);
+                           updateCopyButton(copyButton);
                         }).catch(err => {
                             console.error('Modern copy failed:', err);
-                            fallbackCopyText(textToCopy, button);
+                            fallbackCopyText(textToCopy, copyButton);
                         });
                     } else {
-                        fallbackCopyText(textToCopy, button);
+                        fallbackCopyText(textToCopy, copyButton);
+                    }
+                }
+
+                if (regenButton) {
+                    regenButton.disabled = true;
+                    regenButton.classList.add('animate-spin');
+
+                    const card = regenButton.closest('.result-card');
+                    const dayIndex = parseInt(card.dataset.dayIndex, 10);
+                    const originalInput = card.dataset.input;
+                    
+                    const p = card.querySelector(`#report-text-${dayIndex}`);
+                    const originalTextHTML = p.innerHTML;
+                    p.innerHTML = `<span class="flex items-center gap-2 text-sm" style="color: var(--text-secondary);"><span class="loader-small"></span>Wird neu generiert...</span>`;
+
+                    try {
+                        const inputsForApi = Array(state.days.length).fill('');
+                        inputsForApi[dayIndex] = originalInput;
+                        
+                        const result = await callGeminiApi(inputsForApi, state.selectedGender);
+                        const newReport = result[dayIndex];
+
+                        if (newReport && newReport.text) {
+                            p.innerHTML = newReport.text;
+                            const newSanitizedText = newReport.text.replace(/"/g, '&quot;');
+                            card.querySelector('.copy-btn').dataset.copytext = newSanitizedText;
+                        } else {
+                            throw new Error('Kein gültiger Text von der API erhalten.');
+                        }
+                    } catch (error) {
+                        console.error("Regeneration failed:", error);
+                        p.innerHTML = originalTextHTML; // Bei Fehler alten Text wiederherstellen
+                        showError("Regenerierung fehlgeschlagen.");
+                    } finally {
+                        regenButton.disabled = false;
+                        regenButton.classList.remove('animate-spin');
                     }
                 }
             });
@@ -1045,7 +1125,6 @@
             const themeToggle = document.getElementById('theme-toggle');
             const sunIcon = document.getElementById('theme-icon-sun');
             const moonIcon = document.getElementById('theme-icon-moon');
-            const htmlEl = document.documentElement;
             const currentTheme = localStorage.getItem('theme');
 
             if (currentTheme === 'dark') {
@@ -1067,83 +1146,56 @@
 
 
             // -----------------------------------------------------------------
-            // --- START: UPDATES MODAL LOGIC ---
+            // --- UPDATES MODAL LOGIC ---
             // -----------------------------------------------------------------
             const updatesTriggerButton = document.getElementById('updates-trigger-button');
             const updatesContainer = document.getElementById('updates-container');
             const closeUpdatesWidget = document.getElementById('close-updates-widget');
-            
-            // --- NEU: LOGIK FÜR "NEU"-BADGE ---
-            const LATEST_VERSION_SEEN_KEY = 'latestVersionSeen'; // NEUER Key für localStorage
+            const LATEST_VERSION_SEEN_KEY = 'latestVersionSeen';
             const updateBadge = document.getElementById('update-new-badge');
 
-
-            // Funktion, um das "Gesehen"-Datum zu speichern und Badge zu verstecken
             const markUpdatesAsSeen = () => {
-            // NEU: Lese die Versionsnummer aus dem neuen Span
-            const appVersionSpan = document.getElementById('app-version');
-            if (!appVersionSpan || !updateBadge) return; // Sicherheitscheck
+                const appVersionSpan = document.getElementById('app-version');
+                if (!appVersionSpan || !updateBadge) return;
+                const currentVersion = appVersionSpan.textContent.trim();
+                if (currentVersion) {
+                    localStorage.setItem(LATEST_VERSION_SEEN_KEY, currentVersion);
+                }
+                updateBadge.classList.add('hidden');
+                updateBadge.classList.remove('pulsing');
+            };
 
-            const currentVersion = appVersionSpan.textContent.trim();
-            if (currentVersion) {
-            // NEU: Verwende den neuen localStorage Key
-            localStorage.setItem(LATEST_VERSION_SEEN_KEY, currentVersion);
-            }
-
-    updateBadge.classList.add('hidden');
-    updateBadge.classList.remove('pulsing'); // Animation stoppen
-};
-
-            // Funktion, um beim Laden der Seite zu prüfen, ob es neue Updates gibt
-const checkNewUpdates = () => {
-    // NEU: Lese die Versionsnummer aus dem neuen Span
-    const appVersionSpan = document.getElementById('app-version');
-    if (!appVersionSpan || !updateBadge) return; // Sicherheitscheck
-
-    const currentVersion = appVersionSpan.textContent.trim();
-    if (!currentVersion) return; // Beenden, falls keine Version gefunden wurde
-
-    // NEU: Verwende den neuen localStorage Key
-    const seenVersion = localStorage.getItem(LATEST_VERSION_SEEN_KEY);
-
-    // Vergleiche die aktuelle Version im Code mit der zuletzt gesehenen
-    if (currentVersion !== seenVersion) {
-        updateBadge.classList.remove('hidden');
-        updateBadge.classList.add('pulsing'); // Animation starten
-    }
-};
-
-            // --- ENDE NEUE LOGIK ---
+            const checkNewUpdates = () => {
+                const appVersionSpan = document.getElementById('app-version');
+                if (!appVersionSpan || !updateBadge) return;
+                const currentVersion = appVersionSpan.textContent.trim();
+                if (!currentVersion) return;
+                const seenVersion = localStorage.getItem(LATEST_VERSION_SEEN_KEY);
+                if (currentVersion !== seenVersion) {
+                    updateBadge.classList.remove('hidden');
+                    updateBadge.classList.add('pulsing');
+                }
+            };
 
             if (updatesTriggerButton && updatesContainer && closeUpdatesWidget) {
                 const openUpdatesModal = () => {
                     updatesContainer.classList.add('active');
                     lucide.createIcons();
-                    // --- NEU: Beim Öffnen als gesehen markieren ---
                     markUpdatesAsSeen();
                 }
                 const closeUpdatesModal = () => updatesContainer.classList.remove('active');
-
                 updatesTriggerButton.addEventListener('click', openUpdatesModal);
                 closeUpdatesWidget.addEventListener('click', closeUpdatesModal);
-
                 updatesContainer.addEventListener('click', (e) => {
-                    if (e.target === updatesContainer) {
-                        closeUpdatesModal();
-                    }
+                    if (e.target === updatesContainer) closeUpdatesModal();
                 });
-
                 document.addEventListener('keydown', (e) => {
-                    if (e.key === 'Escape' && updatesContainer.classList.contains('active')) {
-                        closeUpdatesModal();
-                    }
+                    if (e.key === 'Escape' && updatesContainer.classList.contains('active')) closeUpdatesModal();
                 });
             }
-            // --- END: UPDATES MODAL LOGIC ---
-
 
             // -----------------------------------------------------------------
-            // --- START: FEEDBACK SYSTEM LOGIC (ANGEPASST) ---
+            // --- FEEDBACK SYSTEM LOGIC ---
             // -----------------------------------------------------------------
             const feedbackTriggerButton = document.getElementById('feedback-trigger-button');
             const feedbackContainer = document.getElementById('feedback-container'); 
@@ -1190,16 +1242,12 @@ const checkNewUpdates = () => {
                 event.preventDefault(); 
                 const form = event.target;
                 const data = new FormData(form);
-                
                 try {
                     const response = await fetch(form.action, {
                         method: form.method,
                         body: data,
-                        headers: {
-                            'Accept': 'application/json' 
-                        }
+                        headers: { 'Accept': 'application/json' }
                     });
-
                     if (response.ok) {
                         showView(viewConfirmation);
                         form.reset();
@@ -1212,11 +1260,11 @@ const checkNewUpdates = () => {
                         }
                     } else {
                         console.error('Form submission failed', await response.json());
-                        alert('Error sending form. Please try again.');
+                        alert('Fehler beim Senden des Formulars. Bitte erneut versuchen.');
                     }
                 } catch (error) {
                     console.error('Network error:', error);
-                    alert('Error sending form. Please check your connection.');
+                    alert('Fehler beim Senden des Formulars. Bitte Verbindung prüfen.');
                 }
             }
 
@@ -1231,35 +1279,24 @@ const checkNewUpdates = () => {
                 });
             });
 
-            // File Upload Logic
             const setupUploader = (containerSelector) => {
                 const container = document.querySelector(containerSelector);
                 if (!container) return;
-
                 const dropZone = container.querySelector('.file-drop-zone');
                 const fileInput = container.querySelector('input[type="file"]');
                 const previewWrapper = container.querySelector('.file-preview-wrapper');
-                
                 dropZone.addEventListener('click', () => fileInput.click());
                 fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
-
                 ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-                    dropZone.addEventListener(eventName, (e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                    });
+                    dropZone.addEventListener(eventName, (e) => { e.preventDefault(); e.stopPropagation(); });
                 });
-                
                 ['dragenter', 'dragover'].forEach(eventName => {
                     dropZone.addEventListener(eventName, () => dropZone.classList.add('dragover'));
                 });
-
                 ['dragleave', 'drop'].forEach(eventName => {
                     dropZone.addEventListener(eventName, () => dropZone.classList.remove('dragover'));
                 });
-
                 dropZone.addEventListener('drop', (e) => handleFiles(e.dataTransfer.files));
-
                 const handleFiles = (files) => {
                     const file = files[0];
                     if (file && file.type.startsWith('image/')) {
@@ -1268,15 +1305,11 @@ const checkNewUpdates = () => {
                             previewWrapper.innerHTML = `
                                 <div class="file-preview-container">
                                     <img src="${e.target.result}" class="file-preview-img" />
-                                    <div class="file-remove-btn">
-                                        <i data-lucide="x" class="w-4 h-4"></i>
-                                    </div>
-                                </div>
-                            `;
+                                    <div class="file-remove-btn"><i data-lucide="x" class="w-4 h-4"></i></div>
+                                </div>`;
                             lucide.createIcons();
                             previewWrapper.classList.remove('hidden');
                             dropZone.classList.add('hidden');
-
                             previewWrapper.querySelector('.file-remove-btn').addEventListener('click', () => {
                                 fileInput.value = '';
                                 previewWrapper.innerHTML = '';
@@ -1288,26 +1321,19 @@ const checkNewUpdates = () => {
                     }
                 };
             };
-
             setupUploader('.feedback-file-upload-area');
             setupUploader('.bug-file-upload-area');
-
 
             document.addEventListener('click', (event) => {
                 const isClickInsideWidget = feedbackWidget.contains(event.target);
                 const isClickOnButton = feedbackTriggerButton.contains(event.target);
-                if (!isClickInsideWidget && !isClickOnButton) {
-                    if (feedbackContainer.classList.contains('active')) {
-                       closeWidget();
-                    }
+                if (!isClickInsideWidget && !isClickOnButton && feedbackContainer.classList.contains('active')) {
+                   closeWidget();
                 }
             });
-            // --- END: FEEDBACK SYSTEM LOGIC ---
             
-            // Prüfe auf neue Updates beim Seitenladen
             checkNewUpdates();
         });
     </script>
 </body>
 </html>
-
