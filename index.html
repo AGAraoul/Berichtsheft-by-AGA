@@ -651,7 +651,7 @@
             <div class="glass-card rounded-2xl w-full h-full p-8 flex flex-col">
                  <header class="text-center mb-6">
                     <h2 class="font-display text-3xl font-bold">Wochenübersicht</h2>
-                    <p class="text-md" style="color: var(--text-secondary);">Geben Sie Ihre wöchentlichen Aktivitäten ein.</p>
+                    <p class="text-md" style="color: var(--text-secondary);">Gebe Deine wöchentlichen Aktivitäten ein.</p>
                 </header>
                 
                 <div id="day-inputs-grid" class="flex-grow grid gap-y-4 overflow-y-auto p-2 pr-4">
@@ -966,7 +966,7 @@
             async function handleGenerate() {
                 const inputs = Array.from(document.querySelectorAll('#day-inputs-grid textarea')).map(textarea => textarea.value.trim());
                 if (inputs.every(input => input === '')) {
-                     showError('Bitte geben Sie für mindestens einen Tag eine Tätigkeit ein.'); 
+                     showError('Bitte gebe für mindestens einen Tag eine Tätigkeit ein.'); 
                      return;
                 }
                 
