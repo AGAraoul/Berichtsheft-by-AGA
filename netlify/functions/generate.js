@@ -17,9 +17,9 @@ exports.handler = async (event) => {
             throw new Error("API key is not set in environment variables.");
         }
 
-        // Aktualisiertes Modell für potenziell bessere Qualität
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite-preview-09-2025:generateContent?key=${apiKey}`;
-
+        
+        // Wechsel zum stabilen 2.0-Modell für höhere RPM-Limits
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${apiKey}`;
         // Die Logik zur Erstellung der Prompts und der parallelen API-Aufrufe
         // wird vom Frontend ins sichere Backend verschoben.
         const apiPromises = inputs.map((activities, index) => {
