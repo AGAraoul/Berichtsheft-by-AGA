@@ -19,7 +19,7 @@ exports.handler = async (event) => {
 
         
         // Wechsel zum stabilen 2.0-Modell für höhere RPM-Limits
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${apiKey}`;
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent?key=${apiKey}`;
         // Die Logik zur Erstellung der Prompts und der parallelen API-Aufrufe
         // wird vom Frontend ins sichere Backend verschoben.
         const apiPromises = inputs.map((activities, index) => {
