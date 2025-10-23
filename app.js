@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
             card.className = 'flex flex-col';
             card.innerHTML = `
                 <label for="day-input-${index}" class="font-semibold mb-2 text-left">${day}</label>
-                <textarea id="day-input-${index}" rows="4" class="w-full flex-grow rounded-lg p-2 text-base resize-none" placeholder="Stichpunkte..."></textarea>
+                <textarea id="day-input-${index}" rows="4" class="w-full flex-grow rounded-lg p-2 text-base resize-none" placeholder="Stichpunkte oder Fließtext..."></textarea>
             `;
             dayInputsGrid.appendChild(card);
         });

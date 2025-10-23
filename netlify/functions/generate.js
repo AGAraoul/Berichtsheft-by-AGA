@@ -20,6 +20,7 @@ exports.handler = async (event) => {
         
         // Wechsel zum stabilen 2.0-Modell für höhere RPM-Limits
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent?key=${apiKey}`;
+        
         // Die Logik zur Erstellung der Prompts und der parallelen API-Aufrufe
         // wird vom Frontend ins sichere Backend verschoben.
         const apiPromises = inputs.map((activities, index) => {
@@ -32,7 +33,7 @@ exports.handler = async (event) => {
             const pronoun = gender === 'male' ? 'Er' : 'Sie';
             const possessive = gender === 'male' ? 'Seine' : 'Ihre';
 
-            // --- NEUER, ANGEPASSTER PROMPT ---
+            // --- ANGEPASSTER PROMPT (INKL. DEINEM FEEDBACK ZU REGEL 3) ---
             const userPrompt = `
                 Du bist ein erfahrener Ausbildungsbetreuer, der einem ${genderText} Auszubildenden dabei hilft, ein vorbildliches Berichtsheft zu verfassen.
                 Deine Aufgabe ist es, die stichpunktartigen oder unstrukturierten Tätigkeiten des Auszubildenden in einen professionellen und gut lesbaren Bericht umzuwandeln. Das Ziel ist eine qualitativ hochwertige und prägnante Zusammenfassung der Tagesaufgaben.
@@ -40,7 +41,7 @@ exports.handler = async (event) => {
                 Wichtige Regeln, die du ausnahmslos befolgen musst:
                 1.  **Prägnanz und Klarheit:** Wandle die Stichpunkte in einen flüssigen Bericht um, der die Tätigkeiten klar beschreibt. Erläutere wichtige Aufgaben kurz und verständlich, ohne unnötig auszuschweifen. Das Ziel ist ein professioneller, gut lesbarer Text von angemessener Länge (ca. 4-6 Sätze), der die wesentlichen Tagesaufgaben zusammenfasst.
                 2.  **Professioneller Stil:** Schreibe in der 3. Person Singular (z.B. "Der Auszubildende widmete sich...", "${pronoun} analysierte...", "${possessive} Hauptaufgabe war..."). Achte auf das korrekte Geschlecht. Verwende niemals "Ich" oder "Man". Nutze einen sachlichen, kompetenten Ton und integriere, wo passend, fachliche Begriffe.
-                3.  **Flüssiger Textfluss:** Beginne den Bericht mit einem abwechslungsreichen Einleitungssatz, der den Wochentag organisch einbindet (z.B. "Am ${day} setzte der Auszubildende seine Arbeit an... fort." oder "Der ${day} stand ganz im Zeichen von..."). Verbinde die einzelnen Tätigkeiten logisch miteinander, anstatt sie nur aufzuzählen.
+                3.  **Flüssiger Textfluss und Logik:** Beginne den Bericht mit einem abwechslungsreichen Einleitungssatz, der den Wochentag organisch einbindet (z.B. "Am ${day} setzte der Auszubildende seine Arbeit an... fort."). Verbinde Tätigkeiten logisch miteinander, **aber nur, wenn der Zusammenhang offensichtlich ist.** Behandle unzusammenhängende Stichpunkte (z.B. 'Termin über Ausbildung' und 'Informationen über Thema X gesammelt') als **separate, voneinander unabhängige Aufgaben.** Erfinde keine künstlichen Zusammenhänge (z.B. nicht '...ein Termin, *in dem* Informationen gesammelt wurden', sondern '...nahm an einem Termin teil. Zusätzlich sammelte er Informationen zu Thema X.').
                 4.  **Struktur:** Gliedere den Tagesablauf nachvollziehbar. Beginne oft mit der wichtigsten Aufgabe und beschreibe dann weitere Tätigkeiten in logischer Reihenfolge.
                 5.  **Reiner Output:** Das Ergebnis darf NUR der Berichtshefttext sein. Keine Überschriften, keine Anmerkungen, keine Einleitungen wie "Hier ist der Bericht:" und nicht den Tagesnamen voranstellen.
 
@@ -52,16 +53,36 @@ exports.handler = async (event) => {
 
             const payload = { contents: [{ parts: [{ text: userPrompt }] }] };
 
-            return fetch(apiUrl, {
+            // Exponential Backoff bei API-Fehlern (einfache Implementierung)
+            const fetchWithRetry = (url, options, retries = 3, delay = 1000) => {
+                return fetch(url, options)
+                    .then(response => {
+                        if (response.status === 429 && retries > 0) { // Too Many Requests
+                            console.warn(`Rate limit hit for ${day}. Retrying in ${delay}ms... (${retries} retries left)`);
+                            return new Promise(resolve => setTimeout(resolve, delay))
+                                .then(() => fetchWithRetry(url, options, retries - 1, delay * 2));
+                        }
+                        if (!response.ok) {
+                            return response.json().then(err => Promise.reject(new Error(err.error?.message || `API error for ${day} with status ${response.status}`)));
+                        }
+                        return response.json();
+                    });
+            };
+
+            return fetchWithRetry(apiUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             })
-            .then(response => response.ok ? response.json() : response.json().then(err => Promise.reject(new Error(err.error.message || `API error for ${day}`))))
             .then(result => {
                 const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
-                if (!text) throw new Error(`Keine gültige Antwort von der API für ${day} erhalten.`);
+                if (!text) throw new Error(`Keine gültige Antwort von der API für ${day} erhalten. Result: ${JSON.stringify(result)}`);
                 return { day: day, text: text.trim() };
+            })
+            .catch(error => {
+                // Fehler für einen einzelnen Tag abfangen, damit Promise.all() nicht abbricht
+                console.error(`Error processing ${day}:`, error.message);
+                return { day: day, text: `Fehler bei der Generierung für ${day}: ${error.message}` };
             });
         });
         
