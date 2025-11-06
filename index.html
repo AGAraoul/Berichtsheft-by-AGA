@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Berichtsheft, in Sekunden.</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <!-- PNG-Fallback -->
     <link rel="icon" href="kristall.png?v=4" type="image/png">
-    <!-- Apple Touch Icon (iOS Homescreen) -->
     <link rel="apple-touch-icon" href="kristall.png?v=4">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,20 +13,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 
-    <!-- Ausgelagerte CSS-Datei -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
-    <!-- Background Effect -->
     <div class="aurora-container">
         <div class="aurora-shape aurora-1"></div>
         <div class="aurora-shape aurora-2"></div>
         <div class="aurora-shape aurora-3"></div>
     </div>
 
-    <!-- Header with Buttons -->
+    <div class="snow"></div>
+
     <header class="fixed top-4 left-4 right-4 z-50 flex items-center justify-between">
-        <!-- Left Side: Updates Button -->
         <div class="relative">
             <button id="updates-trigger-button" class="interactive-button">
                 <span class="text-initial">Updates</span>
@@ -43,7 +39,6 @@
             </span>
         </div>
     
-        <!-- Right Side: Theme Toggle & Logo -->
         <div class="flex items-center gap-4">
             <button id="theme-toggle" class="glass-card h-12 w-12 flex items-center justify-center rounded-full focus:outline-none" aria-label="Dark Mode umschalten">
                 <svg id="theme-icon-sun" class="h-6 w-6" style="color: var(--icon-color);" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
@@ -55,10 +50,8 @@
         </div>
     </header>
     
-    <!-- Main Container -->
     <main id="app-container" class="w-full max-w-4xl h-[700px] relative">
         
-        <!-- Step 1: Gender Selection -->
         <section id="step-1" class="step active flex flex-col justify-center items-center text-center p-8">
             <div class="glass-card rounded-2xl w-full p-8 md:p-12">
                 <h1 class="font-display text-4xl md:text-5xl font-bold mb-3 shimmer-h1">Berichtsheft by AGA</h1>
@@ -79,7 +72,6 @@
             </div>
         </section>
 
-        <!-- Step 2: Inputs -->
         <section id="step-2" class="step">
             <div class="glass-card rounded-2xl w-full h-full p-8 flex flex-col">
                  <header class="text-center mb-6">
@@ -88,8 +80,7 @@
                 </header>
                 
                 <div id="day-inputs-grid" class="flex-grow grid gap-y-4 overflow-y-auto p-2 pr-4">
-                    <!-- Day cards will be injected by JS -->
-                </div>
+                    </div>
 
                 <div id="error-container" class="h-10 mt-2 text-center"></div>
                 
@@ -104,7 +95,6 @@
             </div>
         </section>
 
-        <!-- Step 3: Loading -->
         <section id="step-3" class="step">
             <div class="glass-card rounded-2xl w-full h-full p-8 flex flex-col justify-center items-center text-center">
                 <span class="loader mb-8"></span>
@@ -113,7 +103,6 @@
             </div>
         </section>
 
-        <!-- Step 4: Results -->
         <section id="step-4" class="step">
             <div class="glass-card rounded-2xl w-full h-full p-8 flex flex-col">
                 <header class="text-center mb-6">
@@ -121,8 +110,7 @@
                     <p class="text-md" style="color: var(--text-secondary);">Hier sind die formulierten Einträge für dein Berichtsheft.</p>
                 </header>
                 <div id="report-output" class="flex-grow space-y-4 overflow-y-auto pr-4">
-                    <!-- Results will be injected here -->
-                </div>
+                    </div>
                 <div class="text-center mt-6">
                     <button id="reset-btn" class="main-btn text-white font-bold py-3 px-6 rounded-full flex items-center gap-2 mx-auto">
                         <i data-lucide="rotate-cw" style="width:20px; height: 20px;"></i> Neuen Bericht erstellen
@@ -132,7 +120,6 @@
         </section>
     </main>
 
-    <!-- START: UPDATES MODAL -->
     <div id="updates-container" class="fixed inset-0 z-[1001] flex items-center justify-center p-4" aria-hidden="true">
         <div id="updates-widget" class="glass-card rounded-2xl w-full max-w-2xl max-h-[80vh] flex flex-col p-6 md:p-8 relative">
             <button id="close-updates-widget" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors" aria-label="Updates schließen">
@@ -140,11 +127,21 @@
             </button>
             <div class="text-center mb-4">
              <h2 class="font-display text-2xl md:text-3xl font-bold mb-1">Neuste Updates</h2>
-                <span id="app-version" class="text-sm font-medium" style="color: var(--text-secondary);">v1.4</span> 
+                <span id="app-version" class="text-sm font-medium" style="color: var(--text-secondary);">v2.0</span> 
                 </div>
             <div id="updates-content" class="flex-grow overflow-y-auto pr-4 space-y-6">
 
-                <!--Update Item 1-->
+                <div class="update-item">
+                    <div class="flex items-center gap-3 mb-2 flex-wrap">
+                        <span class="bg-purple-500/20 text-purple-700 dark:text-purple-400 text-xs font-bold px-2 py-1 rounded-full">DESIGN</span>
+                        <h3 class="font-semibold text-lg">Snowfall- Animation</h3>
+                         <span class="text-sm text-gray-500 dark:text-gray-400">06. Nov. 2025</span>
+                    </div>
+                     <p class="text-gray-600 dark:text-gray-300 ml-4 pl-5 border-l-2 border-gray-200 dark:border-gray-700">
+                        Eine weihnachtliche Snowfall- Animation wurde zum Design hinzugefügt.
+                    </p>
+                </div>
+
                 <div class="update-item">
                     <div class="flex items-center gap-3 mb-2 flex-wrap">
                         <span class="bg-blue-500/20 text-blue-700 dark:text-blue-400 text-xs font-bold px-2 py-1 rounded-full">VERBESSERT</span>
@@ -155,8 +152,6 @@
                         Unabhängige Stichpunkte werden jetzt besser als separate Aufgaben erkannt und nicht mehr künstlich verknüpft.
                         </p>
                 </div>  
-
-                <!-- Update Item 2 -->
 
                 <div class="update-item">
                     <div class="flex items-center gap-3 mb-2 flex-wrap">
@@ -169,7 +164,6 @@
                             <span class="font-semibold text-red-500 dark:text-red-400">Feedback zur Qualität der Berichte gewünscht !</span>
                         </p>
                 </div>  
-                <!-- Update Item 3-->
                 <div class="update-item">
                   <div class="flex items-center gap-3 mb-2 flex-wrap">
                       <span class="bg-green-500/20 text-green-700 dark:text-green-400 text-xs font-bold px-2 py-1 rounded-full">NEU</span>
@@ -180,8 +174,7 @@
                       Gefällt Dir ein generierter Text nicht? Mit dem neuen Refresh-Button neben jedem Eintrag kannst Du jetzt einzelne Tage neu formulieren lassen, ohne den Rest des Berichts zu ändern.
                   </p>
               </div>
-                 <!-- Update Item 4 -->
-                <div class="update-item">
+                 <div class="update-item">
                     <div class="flex items-center gap-3 mb-2 flex-wrap">
                         <span class="bg-green-500/20 text-green-700 dark:text-green-400 text-xs font-bold px-2 py-1 rounded-full">NEU</span>
                         <h3 class="font-semibold text-lg">Feedback System</h3>
@@ -191,23 +184,10 @@
                         Ein komplett neues Feedback-System wurde links unten hinzugefügt! Schlage Ideen vor, oder melde Bugs !
                     </p>
                 </div>
-                 <!-- Update Item 5 -->
-                <div class="update-item">
-                    <div class="flex items-center gap-3 mb-2 flex-wrap">
-                        <span class="bg-purple-500/20 text-purple-700 dark:text-purple-400 text-xs font-bold px-2 py-1 rounded-full">DESIGN</span>
-                        <h3 class="font-semibold text-lg">Aurora-Hintergrund & Dark Mode</h3>
-                         <span class="text-sm text-gray-500 dark:text-gray-400">12. Okt. 2025</span>
-                    </div>
-                     <p class="text-gray-600 dark:text-gray-300 ml-4 pl-5 border-l-2 border-gray-200 dark:border-gray-700">
-                        Die Benutzeroberfläche wurde mit einem dynamischen Aurora-Hintergrundeffekt und einem augenschonenden Dark Mode aufgewertet. Das Design ist jetzt moderner und angenehmer zu bedienen.
-                    </p>
-                </div>
+                
             </div>
         </div>
     </div>
-    <!-- END: UPDATES MODAL -->
-
-    <!-- START: FEEDBACK SYSTEM HTML -->
     <div class="feedback-button-container">
         <button id="feedback-trigger-button" class="interactive-button">
             <span class="text-initial">Feedback</span>
@@ -307,9 +287,6 @@
             </div>
         </div>
     </div>
-    <!-- END: FEEDBACK SYSTEM HTML -->
-
-    <!-- Ausgelagerte JavaScript-Datei -->
     <script src="app.js"></script>
 </body>
 </html>
