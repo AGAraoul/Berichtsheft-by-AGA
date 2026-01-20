@@ -41,7 +41,9 @@ body {
     color: var(--text-primary);
     font-family: 'Inter', sans-serif;
     transition: background-color 0.5s ease, color 0.5s ease;
-    overflow: hidden;
+    /* ÄNDERUNG: Globales Scrollen verhindern & volle Höhe erzwingen */
+    overflow: hidden; 
+    height: 100vh;
 }
 h1, h2, h3, .font-display {
     font-family: 'Poppins', sans-serif;
@@ -75,20 +77,12 @@ h1, h2, h3, .font-display {
 }
 
 /* --- START: SNOWFALL ANIMATION --- */
-/*
-   HINWEIS: Der folgende Code ist eine kompilierte Version des
-   bereitgestellten SCSS-Codes. Variablen ($w: 600, $s: 3s)
-   wurden in fixe Werte umgerechnet.
-   Der ursprüngliche SCSS-Code generiert 70 zufällige 'radial-gradient'-Werte.
-   Dies ist eine vereinfachte, aber funktionale Version.
-*/
 .snow, .snow:before, .snow:after {
     position: absolute;
-    top: -600px; /* $w */
+    top: -600px; 
     left: 0;
     bottom: 0;
     right: 0;
-    /* $grad: (simulated) */
     background-image:
         radial-gradient(4px 4px at 50px 100px, rgba(255,255,255,0.8) 50%, rgba(0,0,0,0)),
         radial-gradient(3px 3px at 150px 300px, rgba(255,255,255,0.6) 50%, rgba(0,0,0,0)),
@@ -105,28 +99,28 @@ h1, h2, h3, .font-display {
         radial-gradient(4px 4px at 80px 480px, rgba(255,255,255,0.9) 50%, rgba(0,0,0,0)),
         radial-gradient(3px 3px at 180px 180px, rgba(255,255,255,0.5) 50%, rgba(0,0,0,0)),
         radial-gradient(5px 5px at 280px 380px, rgba(255,255,255,0.7) 50%, rgba(0,0,0,0));
-    background-size: 600px 600px; /* $w $w */
-    animation: snow 3s linear infinite; /* $s */
+    background-size: 600px 600px; 
+    animation: snow 3s linear infinite; 
     content: "";
-    pointer-events: none; /* Lässt Klicks "durchfallen" */
+    pointer-events: none; 
 }
 .snow:after {
-    margin-left: -200px; /* -$w/3 */
+    margin-left: -200px; 
     opacity: .4;
-    animation-duration: 6s; /* $s*2 */
+    animation-duration: 6s; 
     animation-direction: reverse;
     filter: blur(3px);
 }
 .snow:before {
-    animation-duration: 9s; /* $s*3 */
+    animation-duration: 9s; 
     animation-direction: reverse;
-    margin-left: -300px; /* -$w/2 */
+    margin-left: -300px; 
     opacity: .65;
     filter: blur(1.5px);
 }
 @keyframes snow {
     to {
-        transform: translateY(600px); /* $w */
+        transform: translateY(600px); 
     }
 }
 /* --- END: SNOWFALL ANIMATION --- */
@@ -146,17 +140,35 @@ h1, h2, h3, .font-display {
 .step {
     position: absolute;
     width: 100%;
-    height: 100%;
+    height: 100%; /* Important for internal scrolling */
+    display: flex; /* Make step a flex container */
+    flex-direction: column; /* Stack children vertically */
     opacity: 0;
     visibility: hidden;
     transform: translateY(20px);
     transition: opacity 0.5s ease-out, transform 0.5s ease-out, visibility 0s 0.5s;
+    overflow: hidden; /* Prevent global scroll on step itself */
 }
 .step.active {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
     transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+/* ÄNDERUNG: Scroll-Logik für den Grid-Container */
+#day-inputs-grid {
+    flex: 1; /* Nimm den restlichen verfügbaren Platz im .step Container ein */
+    overflow-y: auto; /* Nur hier drin scrollen */
+    overflow-x: hidden;
+    scrollbar-width: thin; /* Firefox: dünne Scrollbar */
+}
+
+/* NEU: Fix für Kartenhöhe in vertikaler Liste */
+#day-inputs-grid .glass-card {
+    height: auto !important; /* Erlaubt der Karte zu wachsen */
+    min-height: 150px; /* Mindesthöhe damit sie nicht kollabiert */
+    flex-shrink: 0; /* Verhindert, dass Flexbox die Karte quetscht */
 }
 
 /* CUSTOM COMPONENTS */
@@ -204,6 +216,7 @@ h1, h2, h3, .font-display {
     color: var(--text-primary);
 }
 
+/* Alte Textarea Styles (Fallback) */
 #day-inputs-grid textarea {
     background-color: var(--input-bg-color);
     border: 1px solid var(--border-color);
@@ -621,4 +634,74 @@ h1, h2, h3, .font-display {
 }
 #update-new-badge.pulsing {
     animation: pulse-red 1.5s infinite;
+}
+
+/* --- NEU: BULLET ROW STYLING (LINKS REINFLIEGEN + INTERAKTION) --- */
+
+@keyframes slideInFromLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-20px); /* Startet weiter links */
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.bullet-row-animation {
+    display: flex;
+    align-items: center;
+    gap: 15px !important; /* Mehr Abstand zwischen Punkt und Text */
+    margin-bottom: 12px !important; /* Mehr Abstand zwischen den Zeilen */
+    padding: 8px 12px; /* Luftigeres Padding */
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    animation: slideInFromLeft 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    border: 1px solid transparent;
+}
+
+/* Hover Effekt für die ganze Zeile */
+.bullet-row-animation:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+.dark-mode .bullet-row-animation:hover {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+/* Fokus Effekt: Ganze Zeile hervorheben wenn man tippt */
+.bullet-row-animation:focus-within {
+    background-color: rgba(22, 163, 74, 0.08); /* Sanfter Grünton */
+    border-color: rgba(22, 163, 74, 0.3);
+    transform: translateX(5px); /* Kleiner Shift nach rechts für Fokus */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+.dark-mode .bullet-row-animation:focus-within {
+    background-color: rgba(34, 197, 94, 0.1);
+    border-color: rgba(34, 197, 94, 0.3);
+}
+
+/* Bullet Point Styling */
+.bullet-row-animation > div:first-child {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: var(--text-secondary); /* Standardfarbe */
+}
+
+/* Bullet Point: Wird grün und größer beim Tippen */
+.bullet-row-animation:focus-within > div:first-child {
+    background-color: var(--accent-color) !important;
+    transform: scale(1.4);
+    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.2); /* Glow Effekt */
+}
+
+/* Input Styling innerhalb der Row */
+.bullet-row-animation input {
+    background: transparent;
+    border-bottom: 1px solid var(--border-color); /* ÄNDERUNG: Statt transparent */
+    transition: all 0.2s ease;
+    font-size: 1rem;
+    color: var(--text-primary);
+}
+.bullet-row-animation:focus-within input {
+    border-bottom-color: transparent;
 }

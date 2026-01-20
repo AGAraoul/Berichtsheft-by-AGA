@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentStep: 1,
         selectedGender: null,
         days: ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag'],
-        lastInputs: [], // NEU: Speichert die letzten Eingaben für die Regenerierung
+        lastInputs: [], 
     };
 
     // --- DOM ELEMENTS (MAIN APP) ---
@@ -27,19 +27,100 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => { errorContainer.innerHTML = ''; }, 3000);
     };
 
+    // NEU: Erstellt eine einzelne Eingabezeile (Stichpunkt)
+    const createBulletRow = (container, value = '', autoFocus = false) => {
+        const row = document.createElement('div');
+        row.className = 'flex items-center gap-2 mb-2 bullet-row-animation'; // Animation Klasse aus CSS
+        
+        // Design: Kleiner Punkt vorne
+        const bullet = document.createElement('div');
+        bullet.className = 'w-1.5 h-1.5 rounded-full bg-gray-400 dark:bg-gray-500 flex-shrink-0 mt-0.5';
+        
+        // Input Feld
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = value;
+        input.className = 'w-full bg-transparent border-b border-gray-200 dark:border-gray-700 focus:border-green-500 dark:focus:border-green-400 outline-none py-1 transition-colors text-base text-gray-800 dark:text-gray-100 placeholder-gray-400';
+        input.placeholder = 'Tätigkeit eingeben...';
+        
+        // Event Listener für ENTER und BACKSPACE
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const nextRow = row.nextElementSibling;
+                // Wenn es eine nächste Zeile gibt (und diese ein Input ist), springe dahin
+                if (nextRow && nextRow.querySelector('input')) {
+                    nextRow.querySelector('input').focus();
+                } else {
+                    // Sonst: Erstelle neue Zeile
+                    createBulletRow(container, '', true); 
+                }
+            }
+            // Backspace löscht leere Zeile (außer es ist die einzige)
+            if (e.key === 'Backspace' && input.value === '' && container.querySelectorAll('input').length > 1) {
+                e.preventDefault();
+                const prevRow = row.previousElementSibling;
+                row.remove();
+                if (prevRow) {
+                    const prevInput = prevRow.querySelector('input');
+                    prevInput.focus();
+                    // Cursor ans Ende setzen
+                    const len = prevInput.value.length;
+                    prevInput.setSelectionRange(len, len);
+                }
+            }
+        });
+
+        row.appendChild(bullet);
+        row.appendChild(input);
+        container.appendChild(row);
+
+        if (autoFocus) input.focus();
+    };
+
+    // NEU: Erstellt die Karten mit den Listen-Inputs
     const createDayInputCards = () => {
         if (dayInputsGrid.children.length > 0) return; 
-        dayInputsGrid.classList.remove('sm:grid-cols-2', 'lg:grid-cols-3');
-        dayInputsGrid.classList.add('grid-cols-1');
+        
+        // ÄNDERUNG: Layout angepasst für vertikale Liste (flex-col) und breitere Karten (max-w-5xl)
+        // pb-32 sorgt für genug Abstand unten, damit man beim Scrollen nicht gegen den Button stößt
+        dayInputsGrid.className = 'flex flex-col gap-6 p-4 w-full max-w-5xl mx-auto pb-32';
+
         state.days.forEach((day, index) => {
+            // Karte Container
             const card = document.createElement('div');
-            card.className = 'flex flex-col';
-            card.innerHTML = `
-                <label for="day-input-${index}" class="font-semibold mb-2 text-left">${day}</label>
-                <textarea id="day-input-${index}" rows="4" class="w-full flex-grow rounded-lg p-2 text-base resize-none" placeholder="Stichpunkte oder Fließtext..."></textarea>
-            `;
+            card.className = 'glass-card p-6 rounded-xl flex flex-col h-full border border-white/20 shadow-sm relative overflow-hidden';
+            
+            // Header (Wochentag)
+            const header = document.createElement('div');
+            header.className = 'flex justify-between items-center mb-4';
+            header.innerHTML = `<label class="font-display font-bold text-xl text-gray-800 dark:text-gray-100">${day}</label>`;
+            card.appendChild(header);
+
+            // Container für die Bullet Points
+            const inputsContainer = document.createElement('div');
+            inputsContainer.className = 'bullets-container flex-grow flex flex-col min-h-[80px]';
+            inputsContainer.id = `inputs-container-${index}`;
+            
+            // Standardmäßig 3 leere Zeilen erzeugen
+            for(let i=0; i<3; i++) {
+                createBulletRow(inputsContainer);
+            }
+            card.appendChild(inputsContainer);
+
+            // Plus Button
+            const addBtn = document.createElement('button');
+            addBtn.type = 'button';
+            addBtn.className = 'mt-4 flex items-center gap-1 text-sm text-gray-500 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-400 transition-colors font-medium self-start focus:outline-none';
+            addBtn.innerHTML = `<i data-lucide="plus" class="w-4 h-4"></i> Zeile hinzufügen`;
+            addBtn.addEventListener('click', () => createBulletRow(inputsContainer, '', true));
+            
+            card.appendChild(addBtn);
             dayInputsGrid.appendChild(card);
         });
+        
+        // Icons neu rendern für die Plus-Buttons
+        lucide.createIcons();
     };
 
     const navigateToStep = (stepNumber) => {
@@ -50,13 +131,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
     
-    // ANGEPASST: Akzeptiert optionalen onProgress-Callback für den Ladebildschirm
     async function callGeminiApi(inputs, gender, onProgress = null) {
         const functionUrl = '/.netlify/functions/generate';
         let loadingInterval;
 
         if (onProgress) {
-            const loadingMessages = inputs.map((inp, i) => inp ? `Formuliere ${state.days[i]}...` : null).filter(Boolean);
+            // Filtere leere Tage raus für die Ladeanzeige
+            const activeDays = inputs.map((inp, i) => inp ? state.days[i] : null).filter(Boolean);
+            const loadingMessages = activeDays.map(d => `Formuliere ${d}...`);
             loadingMessages.push("Finalisiere Bericht...");
             let messageIndex = 0;
             
@@ -98,20 +180,40 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
+    // ANGEPASST: Liest die Inputs jetzt aus den Listenfeldern aus
     async function handleGenerate() {
-        const inputs = Array.from(document.querySelectorAll('#day-inputs-grid textarea')).map(textarea => textarea.value.trim());
-        if (inputs.every(input => input === '')) {
+        // Daten aus den Inputs sammeln und formatieren
+        const inputs = state.days.map((_, index) => {
+            const container = document.getElementById(`inputs-container-${index}`);
+            if (!container) return '';
+            
+            // Alle Inputs in diesem Container finden
+            const rowInputs = Array.from(container.querySelectorAll('input'));
+            
+            // Werte holen, leere filtern und als Liste formatieren
+            // Ergebnis String: "- Tätigkeit A\n- Tätigkeit B"
+            const dayText = rowInputs
+                .map(input => input.value.trim())
+                .filter(val => val !== '')
+                .map(val => `- ${val}`) 
+                .join('\n');
+                
+            return dayText;
+        });
+
+        // Prüfen, ob ALLES leer ist
+        if (inputs.every(dayInput => dayInput === '')) {
              showError('Bitte gebe für mindestens einen Tag eine Tätigkeit ein.'); 
              return;
         }
         
-        state.lastInputs = inputs; // NEU: Eingaben für später speichern
+        state.lastInputs = inputs; 
         navigateToStep(3);
         
         try {
             const onProgressUpdate = (message) => { loadingStatus.textContent = message; };
             const generatedReports = await callGeminiApi(inputs, state.selectedGender, onProgressUpdate);
-            displayResults(generatedReports, inputs); // ANGEPASST: Übergibt auch die Original-Eingaben
+            displayResults(generatedReports, inputs); 
             navigateToStep(4);
         } catch (error) {
             console.error("API call failed:", error);
@@ -120,29 +222,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // ANGEPASST: Akzeptiert originalInputs, um sie in data-Attributen zu speichern
     function displayResults(reports, originalInputs) {
         reportOutput.innerHTML = '';
         reports.forEach((report, index) => {
             if (report.text) {
                 const card = document.createElement('div');
-                // NEU: data-Attribute für Index und ursprüngliche Eingabe hinzugefügt
                 card.className = 'result-card glass-card relative p-5 rounded-lg';
                 card.dataset.dayIndex = index;
+                // Speichere den formatierten Input (Liste), damit Regenerate funktioniert
                 card.dataset.input = originalInputs[index] || '';
                 card.style.animationDelay = `${index * 100}ms`;
                 
                 const sanitizedText = report.text.replace(/"/g, '&quot;');
                 
-                // NEU: HTML-Struktur mit Regenerate-Button
                 card.innerHTML = `
                     <h3 class="font-display text-xl font-bold mb-2 text-[var(--accent-color)]">${report.day}</h3>
-                    <p id="report-text-${index}" class="leading-relaxed pr-24" style="color: var(--text-secondary);">${report.text}</p>
+                    <p id="report-text-${index}" class="leading-relaxed pr-24 text-gray-700 dark:text-gray-300">${report.text}</p>
                     <div class="absolute top-4 right-4 flex items-center gap-2">
-                        <button title="Neu generieren" class="regenerate-btn p-2 rounded-md">
+                        <button title="Neu generieren" class="regenerate-btn p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                             <i data-lucide="refresh-cw" class="w-4 h-4"></i>
                         </button>
-                        <button class="copy-btn text-sm font-semibold py-2 px-3 rounded-md flex items-center gap-1.5" data-copytext="${sanitizedText}">
+                        <button class="copy-btn text-sm font-semibold py-2 px-3 rounded-md flex items-center gap-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" data-copytext="${sanitizedText}">
                            <i data-lucide="copy" style="width:16px; height: 16px;"></i> <span class="copy-text">Kopieren</span>
                         </button>
                     </div>
@@ -158,10 +258,10 @@ document.addEventListener('DOMContentLoaded', () => {
         state.lastInputs = [];
         maleBtn.classList.remove('active');
         femaleBtn.classList.remove('active');
-        const textareas = document.querySelectorAll('#day-inputs-grid textarea');
-        if (textareas) {
-            textareas.forEach(ta => ta.value = '');
-        }
+        
+        // Grid komplett leeren, damit es neu aufgebaut wird
+        dayInputsGrid.innerHTML = ''; 
+        
         navigateToStep(1);
     };
     
@@ -211,7 +311,6 @@ document.addEventListener('DOMContentLoaded', () => {
     generateBtn.addEventListener('click', handleGenerate);
     resetBtn.addEventListener('click', resetApp);
     
-    // ANGEPASST: Event-Delegation für Copy- und Regenerate-Buttons
     reportOutput.addEventListener('click', async (e) => {
         const copyButton = e.target.closest('.copy-btn');
         const regenButton = e.target.closest('.regenerate-btn');
@@ -232,11 +331,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (regenButton) {
             regenButton.disabled = true;
-            regenButton.classList.add('animate-spin');
+            const icon = regenButton.querySelector('i');
+            icon.classList.add('animate-spin');
 
             const card = regenButton.closest('.result-card');
             const dayIndex = parseInt(card.dataset.dayIndex, 10);
-            const originalInput = card.dataset.input;
+            const originalInput = card.dataset.input; // Das ist jetzt der formatierte String
             
             const p = card.querySelector(`#report-text-${dayIndex}`);
             const originalTextHTML = p.innerHTML;
@@ -258,11 +358,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             } catch (error) {
                 console.error("Regeneration failed:", error);
-                p.innerHTML = originalTextHTML; // Bei Fehler alten Text wiederherstellen
+                p.innerHTML = originalTextHTML; 
                 showError("Regenerierung fehlgeschlagen.");
             } finally {
                 regenButton.disabled = false;
-                regenButton.classList.remove('animate-spin');
+                icon.classList.remove('animate-spin');
             }
         }
     });
@@ -292,7 +392,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // -----------------------------------------------------------------
-    // --- UPDATES MODAL LOGIC ---
+    // --- UPDATES MODAL & FEEDBACK SYSTEM ---
+    // (Restlicher Code bleibt identisch, wird hier nur der Vollständigkeit halber aufgeführt)
     // -----------------------------------------------------------------
     const updatesTriggerButton = document.getElementById('updates-trigger-button');
     const updatesContainer = document.getElementById('updates-container');
@@ -344,9 +445,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // -----------------------------------------------------------------
-    // --- FEEDBACK SYSTEM LOGIC ---
-    // -----------------------------------------------------------------
+    // Feedback System
     const feedbackTriggerButton = document.getElementById('feedback-trigger-button');
     const feedbackContainer = document.getElementById('feedback-container'); 
     const feedbackWidget = document.getElementById('feedback-widget');
@@ -386,10 +485,10 @@ document.addEventListener('DOMContentLoaded', () => {
          lucide.createIcons();
     };
 
-    feedbackTriggerButton.addEventListener('click', openWidget);
-    closeWidgetButton.addEventListener('click', closeWidget);
-    actionGiveFeedback.addEventListener('click', () => showView(viewFeedbackForm));
-    actionReportBug.addEventListener('click', () => showView(viewBugForm));
+    if(feedbackTriggerButton) feedbackTriggerButton.addEventListener('click', openWidget);
+    if(closeWidgetButton) closeWidgetButton.addEventListener('click', closeWidget);
+    if(actionGiveFeedback) actionGiveFeedback.addEventListener('click', () => showView(viewFeedbackForm));
+    if(actionReportBug) actionReportBug.addEventListener('click', () => showView(viewBugForm));
     backButtons.forEach(button => button.addEventListener('click', () => showView(viewMain)));
     
     async function handleFormSubmit(event) {
@@ -422,9 +521,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    feedbackForm.addEventListener('submit', handleFormSubmit);
-    bugForm.addEventListener('submit', handleFormSubmit);
-    doneButton.addEventListener('click', closeWidget);
+    if(feedbackForm) feedbackForm.addEventListener('submit', handleFormSubmit);
+    if(bugForm) bugForm.addEventListener('submit', handleFormSubmit);
+    if(doneButton) doneButton.addEventListener('click', closeWidget);
     
     categoryButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -479,10 +578,12 @@ document.addEventListener('DOMContentLoaded', () => {
     setupUploader('.bug-file-upload-area');
 
     document.addEventListener('click', (event) => {
-        const isClickInsideWidget = feedbackWidget.contains(event.target);
-        const isClickOnButton = feedbackTriggerButton.contains(event.target);
-        if (!isClickInsideWidget && !isClickOnButton && feedbackContainer.classList.contains('active')) {
-           closeWidget();
+        if (feedbackWidget && feedbackContainer.classList.contains('active')) {
+            const isClickInsideWidget = feedbackWidget.contains(event.target);
+            const isClickOnButton = feedbackTriggerButton.contains(event.target);
+            if (!isClickInsideWidget && !isClickOnButton) {
+               closeWidget();
+            }
         }
     });
     
