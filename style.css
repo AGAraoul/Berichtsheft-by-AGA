@@ -45,6 +45,12 @@ body {
     overflow: hidden; 
     height: 100vh;
 }
+
+/* UX: Globaler Greif-Cursor wenn man etwas zieht */
+body.grabbing-cursor {
+    cursor: grabbing !important;
+}
+
 h1, h2, h3, .font-display {
     font-family: 'Poppins', sans-serif;
 }
@@ -656,9 +662,12 @@ h1, h2, h3, .font-display {
     margin-bottom: 12px !important; /* Mehr Abstand zwischen den Zeilen */
     padding: 8px 12px; /* Luftigeres Padding */
     border-radius: 8px;
-    transition: all 0.2s ease;
+    /* FIX: 'all' transition removed to prevent drag conflict */
+    transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     animation: slideInFromLeft 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     border: 1px solid transparent;
+    /* WICHTIG: Erlaubt Hardware-Beschleunigung für flüssigeres Draggen */
+    transform: translate3d(0, 0, 0);
 }
 
 /* Hover Effekt für die ganze Zeile */
@@ -684,11 +693,16 @@ h1, h2, h3, .font-display {
 /* Bullet Point Styling */
 .bullet-row-animation > div:first-child {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    background-color: var(--text-secondary); /* Standardfarbe */
+}
+
+/* Das eigentliche Bullet ist jetzt das zweite Kind, da wir den Handle hinzugefügt haben */
+.bullet-row-animation > div:nth-child(2) {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: var(--text-secondary); 
 }
 
 /* Bullet Point: Wird grün und größer beim Tippen */
-.bullet-row-animation:focus-within > div:first-child {
+.bullet-row-animation:focus-within > div:nth-child(2) {
     background-color: var(--accent-color) !important;
     transform: scale(1.4);
     box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.2); /* Glow Effekt */
@@ -704,4 +718,58 @@ h1, h2, h3, .font-display {
 }
 .bullet-row-animation:focus-within input {
     border-bottom-color: transparent;
+}
+
+/* NEU: UX OPTIMIZED DRAG & DROP STYLES */
+
+.drag-handle {
+    opacity: 0;
+    transition: opacity 0.2s ease, color 0.2s ease;
+    cursor: grab;
+    /* Größere Klickfläche für den Handle */
+    margin: -4px;
+    padding: 4px;
+}
+.drag-handle:active {
+    cursor: grabbing;
+}
+/* Handle anzeigen bei Hover ODER wenn das Element gerade sortiert wird */
+.bullet-row-animation:hover .drag-handle,
+.sortable-drag .drag-handle,
+.sortable-chosen .drag-handle {
+    opacity: 1;
+}
+
+/* 1. CHOSEN STATE: Sofortiges Feedback beim Klicken/Tippen */
+.sortable-chosen {
+    background-color: var(--card-bg-color); 
+    /* Entfernt Borders/Schatten kurz, bis Drag beginnt, für sauberen Look */
+}
+
+/* 2. DRAG STATE: Während das Element bewegt wird */
+.sortable-drag {
+    opacity: 1 !important; /* Verhindert Transparenz des Original-Elements */
+    background-color: var(--card-bg-color);
+    box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+    /* Der "Pop & Tilt" Effekt */
+    transform: scale(1.02) rotate(2deg); 
+    border-radius: 8px;
+    border: 1px solid var(--accent-color); /* Grüner Rand beim Draggen */
+    z-index: 1000;
+    cursor: grabbing !important;
+    /* CRITICAL: Transitions deaktivieren während Drag für 1:1 Maus-Tracking */
+    transition: none !important; 
+    animation: none !important;
+}
+
+/* 3. GHOST STATE: Der Platzhalter, wo das Element landen wird */
+.sortable-ghost {
+    opacity: 0.4;
+    background-color: rgba(22, 163, 74, 0.1); /* Sanftes Grün */
+    border: 2px dashed var(--accent-color);
+    box-shadow: none;
+    color: transparent; /* Text im Placeholder ausblenden für cleaneren Look */
+}
+.sortable-ghost * {
+    visibility: hidden; /* Inhalt des Placeholders verstecken */
 }
