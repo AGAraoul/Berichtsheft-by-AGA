@@ -1,5 +1,5 @@
 import { state } from './state.js';
-import { elements, navigateToStep, handleGenerate, resetApp, setupThemeToggle, fallbackCopyText, displayResults } from './ui.js';
+import { elements, navigateToStep, handleGenerate, resetApp, fallbackCopyText, updateCopyButton, showError } from './ui.js';
 import { setupUpdatesWidget, setupFeedbackWidget } from './features.js';
 import { callGeminiApi } from './api.js';
 
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const textToCopy = copyButton.dataset.copytext;
                 if (navigator.clipboard && window.isSecureContext) {
                     navigator.clipboard.writeText(textToCopy).then(() => {
-                        import('./ui.js').then(module => module.updateCopyButton(copyButton));
+                        updateCopyButton(copyButton);
                     }).catch(err => {
                         console.error('Modern copy failed:', err);
                         fallbackCopyText(textToCopy, copyButton);
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 } catch (error) {
                     console.error("Regeneration failed:", error);
                     p.innerHTML = originalTextHTML;
-                    import('./ui.js').then(module => module.showError("Regenerierung fehlgeschlagen."));
+                    showError("Regenerierung fehlgeschlagen.");
                 } finally {
                     regenButton.disabled = false;
                     if (icon) icon.classList.remove('animate-spin');
