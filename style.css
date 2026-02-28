@@ -82,54 +82,36 @@ h1, h2, h3, .font-display {
     100% { transform: translate(-50px, -100px) scale(1); }
 }
 
-/* --- START: SNOWFALL ANIMATION --- */
-.snow, .snow:before, .snow:after {
+/* --- START: CHERRY BLOSSOM ANIMATION --- */
+.sakura-petal {
     position: absolute;
-    top: -600px; 
-    left: 0;
-    bottom: 0;
-    right: 0;
-    background-image:
-        radial-gradient(4px 4px at 50px 100px, rgba(255,255,255,0.8) 50%, rgba(0,0,0,0)),
-        radial-gradient(3px 3px at 150px 300px, rgba(255,255,255,0.6) 50%, rgba(0,0,0,0)),
-        radial-gradient(5px 5px at 250px 500px, rgba(255,255,255,0.9) 50%, rgba(0,0,0,0)),
-        radial-gradient(2px 2px at 350px 200px, rgba(255,255,255,0.5) 50%, rgba(0,0,0,0)),
-        radial-gradient(4px 4px at 450px 400px, rgba(255,255,255,0.7) 50%, rgba(0,0,0,0)),
-        radial-gradient(3px 3px at 550px 50px, rgba(255,255,255,0.8) 50%, rgba(0,0,0,0)),
-        radial-gradient(5px 5px at 20px 580px, rgba(255,255,255,0.6) 50%, rgba(0,0,0,0)),
-        radial-gradient(2px 2px at 120px 220px, rgba(255,255,255,0.9) 50%, rgba(0,0,0,0)),
-        radial-gradient(4px 4px at 220px 420px, rgba(255,255,255,0.5) 50%, rgba(0,0,0,0)),
-        radial-gradient(3px 3px at 320px 120px, rgba(255,255,255,0.7) 50%, rgba(0,0,0,0)),
-        radial-gradient(5px 5px at 420px 320px, rgba(255,255,255,0.8) 50%, rgba(0,0,0,0)),
-        radial-gradient(2px 2px at 520px 520px, rgba(255,255,255,0.6) 50%, rgba(0,0,0,0)),
-        radial-gradient(4px 4px at 80px 480px, rgba(255,255,255,0.9) 50%, rgba(0,0,0,0)),
-        radial-gradient(3px 3px at 180px 180px, rgba(255,255,255,0.5) 50%, rgba(0,0,0,0)),
-        radial-gradient(5px 5px at 280px 380px, rgba(255,255,255,0.7) 50%, rgba(0,0,0,0));
-    background-size: 600px 600px; 
-    animation: snow 3s linear infinite; 
-    content: "";
-    pointer-events: none; 
+    top: -20vh;
+    background: linear-gradient(135deg, #ffc0cb 0%, #ffb7c5 100%);
+    border-radius: 15px 0px 15px 0px; /* Typische Blütenblatt-Form */
+    box-shadow: 0 0 10px rgba(255, 183, 197, 0.4);
+    transform-origin: center;
+    /* CSS Variablen kommen aus dem JS für weiche, zufällige Bewegungen */
+    animation: 
+        fall var(--fall-duration) linear var(--delay) infinite, 
+        sway var(--sway-duration) ease-in-out var(--delay) infinite alternate;
 }
-.snow:after {
-    margin-left: -200px; 
-    opacity: .4;
-    animation-duration: 6s; 
-    animation-direction: reverse;
-    filter: blur(3px);
-}
-.snow:before {
-    animation-duration: 9s; 
-    animation-direction: reverse;
-    margin-left: -300px; 
-    opacity: .65;
-    filter: blur(1.5px);
-}
-@keyframes snow {
-    to {
-        transform: translateY(600px); 
+
+@keyframes fall {
+    0% { 
+        top: -10vh; 
+        transform: rotate3d(1, 1, 1, var(--random-rotation-start));
+    }
+    100% { 
+        top: 110vh; 
+        transform: rotate3d(1, 1, 1, var(--random-rotation-end));
     }
 }
-/* --- END: SNOWFALL ANIMATION --- */
+
+@keyframes sway {
+    0% { margin-left: calc(var(--sway-x) * -1); }
+    100% { margin-left: var(--sway-x); }
+}
+/* --- END: CHERRY BLOSSOM ANIMATION --- */
 
 
 /* CARD & LAYOUT */
