@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,22 +9,26 @@
     <link rel="icon" href="kristall.png?v=4" type="image/png">
     <link rel="apple-touch-icon" href="kristall.png?v=4">
     <script src="https://cdn.tailwindcss.com"></script>
+
     <head>
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <script>
-      tailwind.config = {
-        darkMode: ['class', '.dark-mode'],
-      }
-    </script>
+        <script src="https://cdn.tailwindcss.com"></script>
+
+        <script>
+            tailwind.config = {
+                darkMode: ['class', '.dark-mode'],
+            }
+        </script>
     </head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body class="flex items-center justify-center min-h-screen p-4">
     <div class="aurora-container">
         <div class="aurora-shape aurora-1"></div>
@@ -43,28 +48,40 @@
                 </div>
                 <div class="background-fill"></div>
             </button>
-            <span id="update-new-badge" class="hidden absolute -top-1 -right-2 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+            <span id="update-new-badge"
+                class="hidden absolute -top-1 -right-2 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
                 NEU
             </span>
         </div>
-    
+
         <div class="flex items-center gap-4">
-            <button id="theme-toggle" class="glass-card h-12 w-12 flex items-center justify-center rounded-full focus:outline-none" aria-label="Dark Mode umschalten">
-                <svg id="theme-icon-sun" class="h-6 w-6" style="color: var(--icon-color);" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-                <svg id="theme-icon-moon" class="h-6 w-6 hidden" style="color: var(--icon-color);" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+            <button id="theme-toggle"
+                class="glass-card h-12 w-12 flex items-center justify-center rounded-full focus:outline-none"
+                aria-label="Dark Mode umschalten">
+                <svg id="theme-icon-sun" class="h-6 w-6" style="color: var(--icon-color);" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                <svg id="theme-icon-moon" class="h-6 w-6 hidden" style="color: var(--icon-color);" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
             </button>
             <div class="flex items-center justify-center h-12 w-auto p-2">
                 <img src="schaeffler-logo.svg" alt="Schaeffler Logo" class="h-8">
             </div>
         </div>
     </header>
-    
+
     <main id="app-container" class="w-full max-w-4xl h-[700px] relative">
-        
+
         <section id="step-1" class="step active flex flex-col justify-center items-center text-center p-8">
             <div class="glass-card rounded-2xl w-full p-8 md:p-12">
                 <h1 class="font-display text-4xl md:text-5xl font-bold mb-3 shimmer-h1">Berichtsheft by AGA</h1>
-                <p class="text-lg mb-8" style="color: var(--text-secondary);">Erstelle professionelle Ausbildungsberichte in Rekordzeit.</p>
+                <p class="text-lg mb-8" style="color: var(--text-secondary);">Erstelle professionelle
+                    Ausbildungsberichte in Rekordzeit.</p>
                 <div class="w-full">
                     <h3 class="text-lg font-semibold mb-6">Für wen wird der Bericht erstellt?</h3>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -83,22 +100,25 @@
 
         <section id="step-2" class="step">
             <div class="glass-card rounded-2xl w-full h-full p-8 flex flex-col">
-                 <header class="text-center mb-6">
+                <header class="text-center mb-6">
                     <h2 class="font-display text-3xl font-bold">Wochenübersicht</h2>
-                    <p class="text-md" style="color: var(--text-secondary);">Gebe Deine wöchentlichen Aktivitäten ein.</p>
+                    <p class="text-md" style="color: var(--text-secondary);">Gebe Deine wöchentlichen Aktivitäten ein.
+                    </p>
                 </header>
-                
+
                 <div id="day-inputs-grid" class="flex-grow grid gap-y-4 overflow-y-auto p-2 pr-4">
-                    </div>
+                </div>
 
                 <div id="error-container" class="h-10 mt-2 text-center"></div>
-                
+
                 <div class="flex justify-between items-center mt-2">
-                    <button id="back-to-gender-btn" class="secondary-btn font-semibold py-3 px-5 rounded-lg flex items-center gap-2">
-                       <i data-lucide="arrow-left" style="width:20px; height: 20px;"></i> Zurück
+                    <button id="back-to-gender-btn"
+                        class="secondary-btn font-semibold py-3 px-5 rounded-lg flex items-center gap-2">
+                        <i data-lucide="arrow-left" style="width:20px; height: 20px;"></i> Zurück
                     </button>
-                    <button id="generate-btn" class="main-btn text-white font-bold py-3 px-5 rounded-lg flex items-center gap-2">
-                       <i data-lucide="sparkles" style="width:20px; height: 20px;"></i> Bericht erstellen
+                    <button id="generate-btn"
+                        class="main-btn text-white font-bold py-3 px-5 rounded-lg flex items-center gap-2">
+                        <i data-lucide="sparkles" style="width:20px; height: 20px;"></i> Bericht erstellen
                     </button>
                 </div>
             </div>
@@ -116,12 +136,14 @@
             <div class="glass-card rounded-2xl w-full h-full p-8 flex flex-col">
                 <header class="text-center mb-6">
                     <h2 class="font-display text-3xl font-bold">Dein Wochenbericht</h2>
-                    <p class="text-md" style="color: var(--text-secondary);">Hier sind die formulierten Einträge für dein Berichtsheft.</p>
+                    <p class="text-md" style="color: var(--text-secondary);">Hier sind die formulierten Einträge für
+                        dein Berichtsheft.</p>
                 </header>
                 <div id="report-output" class="flex-grow space-y-4 overflow-y-auto pr-4">
-                    </div>
+                </div>
                 <div class="text-center mt-6">
-                    <button id="reset-btn" class="main-btn text-white font-bold py-3 px-6 rounded-full flex items-center gap-2 mx-auto">
+                    <button id="reset-btn"
+                        class="main-btn text-white font-bold py-3 px-6 rounded-full flex items-center gap-2 mx-auto">
                         <i data-lucide="rotate-cw" style="width:20px; height: 20px;"></i> Neuen Bericht erstellen
                     </button>
                 </div>
@@ -130,71 +152,90 @@
     </main>
 
     <div id="updates-container" class="fixed inset-0 z-[1001] flex items-center justify-center p-4" aria-hidden="true">
-        <div id="updates-widget" class="glass-card rounded-2xl w-full max-w-2xl max-h-[80vh] flex flex-col p-6 md:p-8 relative">
-            <button id="close-updates-widget" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors" aria-label="Updates schließen">
+        <div id="updates-widget"
+            class="glass-card rounded-2xl w-full max-w-2xl max-h-[80vh] flex flex-col p-6 md:p-8 relative">
+            <button id="close-updates-widget"
+                class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
+                aria-label="Updates schließen">
                 <i data-lucide="x" class="w-6 h-6"></i>
             </button>
             <div class="text-center mb-4">
-             <h2 class="font-display text-2xl md:text-3xl font-bold mb-1">Neuste Updates</h2>
-                <span id="app-version" class="text-sm font-medium" style="color: var(--text-secondary);">v4.0</span> 
-                </div>
+                <h2 class="font-display text-2xl md:text-3xl font-bold mb-1">Neuste Updates</h2>
+                <span id="app-version" class="text-sm font-medium" style="color: var(--text-secondary);">v4.1</span>
+            </div>
             <div id="updates-content" class="flex-grow overflow-y-auto pr-4 space-y-6">
 
-                 <div class="update-item">
-                  <div class="flex items-center gap-3 mb-2 flex-wrap">
-                      <span class="bg-green-500/20 text-green-700 dark:text-green-400 text-xs font-bold px-2 py-1 rounded-full">NEU</span>
-                      <h3 class="font-semibold text-lg">Sortier- Funktion</h3>
-                      <span class="text-sm text-gray-500 dark:text-gray-400">21. Jan. 2026</span>
-                  </div>
-                  <p class="text-gray-600 dark:text-gray-300 ml-4 pl-5 border-l-2 border-gray-200 dark:border-gray-700">
-                      Stichpunkte in der Wochenübersicht können nun per Drag and Drop verschoben werden.
-                  </p>
-              </div>
-
                 <div class="update-item">
                     <div class="flex items-center gap-3 mb-2 flex-wrap">
-                        <span class="bg-purple-500/20 text-purple-700 dark:text-purple-400 text-xs font-bold px-2 py-1 rounded-full">DESIGN</span>
-                        <h3 class="font-semibold text-lg">Wochenübersicht überarbeitet</h3>
-                         <span class="text-sm text-gray-500 dark:text-gray-400">20. Jan. 2026</span>
+                        <span
+                            class="bg-green-500/20 text-green-700 dark:text-green-400 text-xs font-bold px-2 py-1 rounded-full">NEU</span>
+                        <h3 class="font-semibold text-lg">Sortier- Funktion</h3>
+                        <span class="text-sm text-gray-500 dark:text-gray-400">21. Jan. 2026</span>
                     </div>
-                     <p class="text-gray-600 dark:text-gray-300 ml-4 pl-5 border-l-2 border-gray-200 dark:border-gray-700">
-                        Einzelne von einander unabhängige Stichpunkte werden nun komplett von einander getrennt. Mithilfe der ENTER Taste kann direkt in die nächste Zeile gesprungen oder eine neue erstellt werden.
+                    <p
+                        class="text-gray-600 dark:text-gray-300 ml-4 pl-5 border-l-2 border-gray-200 dark:border-gray-700">
+                        Stichpunkte in der Wochenübersicht können nun per Drag and Drop verschoben werden.
                     </p>
                 </div>
-            
-                <div class="update-item">
-                    <div class="flex items-center gap-3 mb-2 flex-wrap">
-                        <span class="bg-blue-500/20 text-blue-700 dark:text-blue-400 text-xs font-bold px-2 py-1 rounded-full">VERBESSERT</span>
-                        <h3 class="font-semibold text-lg">Massives KI-Upgrade (Groq Llama 3)</h3>
-                         <span class="text-sm text-gray-500 dark:text-gray-400">28. Feb. 2026</span>
-                    </div>
-                    <p class="text-gray-600 dark:text-gray-300 ml-4 pl-5 border-l-2 border-gray-200 dark:border-gray-700">
-                        Wir haben das alte Google Gemini Modell durch das unfassbar schnelle <strong>Llama-3.3-70B</strong> auf Groq-Servern ersetzt. Berichte werden nun beinahe <strong>in Echtzeit generiert</strong>. Die nervigen "5 Anfragen pro Minute" Limits wurden <strong>komplett entfernt!</strong>
-                        </p>
-                </div>  
 
                 <div class="update-item">
                     <div class="flex items-center gap-3 mb-2 flex-wrap">
-                        <span class="bg-purple-500/20 text-purple-700 dark:text-purple-400 text-xs font-bold px-2 py-1 rounded-full">DESIGN</span>
-                        <h3 class="font-semibold text-lg">Snowfall- Animation</h3>
-                         <span class="text-sm text-gray-500 dark:text-gray-400">06. Nov. 2025</span>
+                        <span
+                            class="bg-purple-500/20 text-purple-700 dark:text-purple-400 text-xs font-bold px-2 py-1 rounded-full">DESIGN</span>
+                        <h3 class="font-semibold text-lg">Wochenübersicht überarbeitet</h3>
+                        <span class="text-sm text-gray-500 dark:text-gray-400">20. Jan. 2026</span>
                     </div>
-                     <p class="text-gray-600 dark:text-gray-300 ml-4 pl-5 border-l-2 border-gray-200 dark:border-gray-700">
+                    <p
+                        class="text-gray-600 dark:text-gray-300 ml-4 pl-5 border-l-2 border-gray-200 dark:border-gray-700">
+                        Einzelne von einander unabhängige Stichpunkte werden nun komplett von einander getrennt.
+                        Mithilfe der ENTER Taste kann direkt in die nächste Zeile gesprungen oder eine neue erstellt
+                        werden.
+                    </p>
+                </div>
+
+                <div class="update-item">
+                    <div class="flex items-center gap-3 mb-2 flex-wrap">
+                        <span
+                            class="bg-blue-500/20 text-blue-700 dark:text-blue-400 text-xs font-bold px-2 py-1 rounded-full">VERBESSERT</span>
+                        <h3 class="font-semibold text-lg">Massives KI-Upgrade (Groq Llama 3)</h3>
+                        <span class="text-sm text-gray-500 dark:text-gray-400">28. Feb. 2026</span>
+                    </div>
+                    <p
+                        class="text-gray-600 dark:text-gray-300 ml-4 pl-5 border-l-2 border-gray-200 dark:border-gray-700">
+                        Wir haben das alte Google Gemini Modell durch das unfassbar schnelle
+                        <strong>Llama-3.3-70B</strong> auf Groq-Servern ersetzt. Berichte werden nun beinahe <strong>in
+                            Echtzeit generiert</strong>. Die nervigen "5 Anfragen pro Minute" Limits wurden
+                        <strong>komplett entfernt!</strong>
+                    </p>
+                </div>
+
+                <div class="update-item">
+                    <div class="flex items-center gap-3 mb-2 flex-wrap">
+                        <span
+                            class="bg-purple-500/20 text-purple-700 dark:text-purple-400 text-xs font-bold px-2 py-1 rounded-full">DESIGN</span>
+                        <h3 class="font-semibold text-lg">Snowfall- Animation</h3>
+                        <span class="text-sm text-gray-500 dark:text-gray-400">06. Nov. 2025</span>
+                    </div>
+                    <p
+                        class="text-gray-600 dark:text-gray-300 ml-4 pl-5 border-l-2 border-gray-200 dark:border-gray-700">
                         Eine Snowfall- Animation wurde zum Design hinzugefügt.
                     </p>
                 </div>
 
                 <div class="update-item">
-                  <div class="flex items-center gap-3 mb-2 flex-wrap">
-                      <span class="bg-green-500/20 text-green-700 dark:text-green-400 text-xs font-bold px-2 py-1 rounded-full">NEU</span>
-                      <h3 class="font-semibold text-lg">Re- Generieren Button</h3>
-                      <span class="text-sm text-gray-500 dark:text-gray-400">20. Okt. 2025</span>
-                  </div>
-                  <p class="text-gray-600 dark:text-gray-300 ml-4 pl-5 border-l-2 border-gray-200 dark:border-gray-700">
-                      Gefällt Dir ein generierter Text nicht? Mit dem neuen Refresh-Button neben jedem Eintrag kannst Du jetzt einzelne Tage neu formulieren lassen, ohne den Rest des Berichts zu ändern.
-                  </p>
-              </div>
-                 
+                    <div class="flex items-center gap-3 mb-2 flex-wrap">
+                        <span
+                            class="bg-green-500/20 text-green-700 dark:text-green-400 text-xs font-bold px-2 py-1 rounded-full">NEU</span>
+                        <h3 class="font-semibold text-lg">Re- Generieren Button</h3>
+                        <span class="text-sm text-gray-500 dark:text-gray-400">20. Okt. 2025</span>
+                    </div>
+                    <p
+                        class="text-gray-600 dark:text-gray-300 ml-4 pl-5 border-l-2 border-gray-200 dark:border-gray-700">
+                        Gefällt Dir ein generierter Text nicht? Mit dem neuen Refresh-Button neben jedem Eintrag kannst
+                        Du jetzt einzelne Tage neu formulieren lassen, ohne den Rest des Berichts zu ändern.
+                    </p>
+                </div>
+
             </div>
         </div>
     </div>
@@ -211,42 +252,58 @@
 
     <div id="feedback-container" class="fixed inset-0 z-[1001] flex items-center justify-center p-4" aria-hidden="true">
         <div id="feedback-widget" class="feedback-widget">
-            <button id="close-widget-button" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors" aria-label="Feedback-Widget schließen">
+            <button id="close-widget-button"
+                class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
+                aria-label="Feedback-Widget schließen">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
             <div id="view-main" class="p-6">
                 <h2 class="font-display text-xl font-semibold mb-1">Wie kann Ich helfen?</h2>
                 <p class="mb-6">Wähle eines der folgenden Optionen.</p>
                 <div class="space-y-3">
-                    <button id="action-give-feedback" class="feedback-action-btn group w-full text-left p-4 hover:bg-green-500/10 dark:hover:bg-green-500/10 border-2 border-transparent hover:border-green-500/20 dark:hover:border-green-500/30 rounded-lg transition-all flex items-center gap-4">
-                        <div class="bg-green-100 dark:bg-green-900/50 group-hover:bg-green-200 dark:group-hover:bg-green-900/80 rounded-lg p-2 transition-colors"><i data-lucide="lightbulb" class="w-6 h-6 text-green-600"></i></div>
+                    <button id="action-give-feedback"
+                        class="feedback-action-btn group w-full text-left p-4 hover:bg-green-500/10 dark:hover:bg-green-500/10 border-2 border-transparent hover:border-green-500/20 dark:hover:border-green-500/30 rounded-lg transition-all flex items-center gap-4">
+                        <div
+                            class="bg-green-100 dark:bg-green-900/50 group-hover:bg-green-200 dark:group-hover:bg-green-900/80 rounded-lg p-2 transition-colors">
+                            <i data-lucide="lightbulb" class="w-6 h-6 text-green-600"></i></div>
                         <div class="flex-1">
                             <span class="font-semibold">Feedback geben</span>
                             <p class="text-sm">Teile mir Deine Ideen mit.</p>
                         </div>
-                        <i data-lucide="chevron-right" class="w-5 h-5 text-gray-400 group-hover:text-green-600 transition-transform group-hover:translate-x-1"></i>
+                        <i data-lucide="chevron-right"
+                            class="w-5 h-5 text-gray-400 group-hover:text-green-600 transition-transform group-hover:translate-x-1"></i>
                     </button>
-                    <button id="action-report-bug" class="feedback-action-btn group w-full text-left p-4 hover:bg-red-500/10 dark:hover:bg-red-500/10 border-2 border-transparent hover:border-red-500/20 dark:hover:border-red-500/30 rounded-lg transition-all flex items-center gap-4">
-                         <div class="bg-red-100 dark:bg-red-900/50 group-hover:bg-red-200 dark:group-hover:bg-red-900/80 rounded-lg p-2 transition-colors"><i data-lucide="bug" class="w-6 h-6 text-red-600"></i></div>
-                         <div class="flex-1">
+                    <button id="action-report-bug"
+                        class="feedback-action-btn group w-full text-left p-4 hover:bg-red-500/10 dark:hover:bg-red-500/10 border-2 border-transparent hover:border-red-500/20 dark:hover:border-red-500/30 rounded-lg transition-all flex items-center gap-4">
+                        <div
+                            class="bg-red-100 dark:bg-red-900/50 group-hover:bg-red-200 dark:group-hover:bg-red-900/80 rounded-lg p-2 transition-colors">
+                            <i data-lucide="bug" class="w-6 h-6 text-red-600"></i></div>
+                        <div class="flex-1">
                             <span class="font-semibold">Bug melden</span>
                             <p class="text-sm">Hilf mir, Probleme zu beheben.</p>
                         </div>
-                         <i data-lucide="chevron-right" class="w-5 h-5 text-gray-400 group-hover:text-red-600 transition-transform group-hover:translate-x-1"></i>
+                        <i data-lucide="chevron-right"
+                            class="w-5 h-5 text-gray-400 group-hover:text-red-600 transition-transform group-hover:translate-x-1"></i>
                     </button>
                 </div>
             </div>
             <div id="view-feedback-form" class="p-6 hidden">
-                <button class="back-button absolute top-4 left-4 flex items-center gap-1 text-sm hover:text-gray-800 dark:hover:text-gray-200 transition-colors"><i data-lucide="arrow-left" class="w-4 h-4"></i><span>Zurück</span></button>
+                <button
+                    class="back-button absolute top-4 left-4 flex items-center gap-1 text-sm hover:text-gray-800 dark:hover:text-gray-200 transition-colors"><i
+                        data-lucide="arrow-left" class="w-4 h-4"></i><span>Zurück</span></button>
                 <h2 class="font-display text-xl font-semibold text-center mb-4 mt-2">Feedback geben</h2>
-                <form id="feedback-form" action="https://formspree.io/f/xwprybab" method="POST" class="space-y-4" enctype="multipart/form-data">
+                <form id="feedback-form" action="https://formspree.io/f/xwprybab" method="POST" class="space-y-4"
+                    enctype="multipart/form-data">
                     <div>
                         <label class="block text-sm font-medium mb-2">Kategorie</label>
-                        <div> <label class="category-button active"><input type="radio" name="category" value="suggestion" class="sr-only" checked>Vorschlag</label>
-                            </div>
+                        <div> <label class="category-button active"><input type="radio" name="category"
+                                    value="suggestion" class="sr-only" checked>Vorschlag</label>
+                        </div>
                     </div>
-                    <div><textarea name="Feedback-Nachricht" class="w-full h-28 p-3 border border-gray-300 dark:border-slate-600 bg-white dark:bg-transparent text-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none resize-none focus:ring-2 focus:ring-green-500" placeholder="Teile mir Deine Gedanken mit..."></textarea></div>
-                    
+                    <div><textarea name="Feedback-Nachricht"
+                            class="w-full h-28 p-3 border border-gray-300 dark:border-slate-600 bg-white dark:bg-transparent text-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none resize-none focus:ring-2 focus:ring-green-500"
+                            placeholder="Teile mir Deine Gedanken mit..."></textarea></div>
+
                     <div class="feedback-file-upload-area">
                         <div class="file-drop-zone">
                             <div class="file-drop-zone-text">
@@ -259,23 +316,36 @@
                         <input type="file" name="attachment" class="hidden" accept="image/*">
                     </div>
 
-                    <div><label for="email-feedback" class="block text-sm font-medium">E-Mail (optional)</label><input type="email" name="Kontakt-Email" id="email-feedback" class="mt-1 w-full p-3 border border-gray-300 dark:border-slate-600 bg-white dark:bg-transparent text-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="you@example.com"></div>
-                    <div class="pt-2"><button type="submit" class="w-full main-btn flex items-center justify-center py-2.5 px-5 text-sm font-semibold text-white rounded-lg transition-all">Feedback senden</button></div>
+                    <div><label for="email-feedback" class="block text-sm font-medium">E-Mail (optional)</label><input
+                            type="email" name="Kontakt-Email" id="email-feedback"
+                            class="mt-1 w-full p-3 border border-gray-300 dark:border-slate-600 bg-white dark:bg-transparent text-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                            placeholder="you@example.com"></div>
+                    <div class="pt-2"><button type="submit"
+                            class="w-full main-btn flex items-center justify-center py-2.5 px-5 text-sm font-semibold text-white rounded-lg transition-all">Feedback
+                            senden</button></div>
                 </form>
             </div>
             <div id="view-bug-form" class="p-6 hidden">
-                 <button class="back-button absolute top-4 left-4 flex items-center gap-1 text-sm hover:text-gray-800 dark:hover:text-gray-200 transition-colors"><i data-lucide="arrow-left" class="w-4 h-4"></i><span>Zurück</span></button>
+                <button
+                    class="back-button absolute top-4 left-4 flex items-center gap-1 text-sm hover:text-gray-800 dark:hover:text-gray-200 transition-colors"><i
+                        data-lucide="arrow-left" class="w-4 h-4"></i><span>Zurück</span></button>
                 <h2 class="font-display text-xl font-semibold text-center mb-4 mt-2">Bug melden</h2>
-                <form id="bug-form" action="https://formspree.io/f/xwprybab" method="POST" class="space-y-4" enctype="multipart/form-data">
-                    <div><label for="bug-summary" class="block text-sm font-medium">Zusammenfassung</label><input type="text" name="Bug-Zusammenfassung" id="bug-summary" class="mt-1 w-full p-3 border border-gray-300 dark:border-slate-600 bg-white dark:bg-transparent text-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="z.B. Button funktioniert nicht"></div>
+                <form id="bug-form" action="https://formspree.io/f/xwprybab" method="POST" class="space-y-4"
+                    enctype="multipart/form-data">
+                    <div><label for="bug-summary" class="block text-sm font-medium">Zusammenfassung</label><input
+                            type="text" name="Bug-Zusammenfassung" id="bug-summary"
+                            class="mt-1 w-full p-3 border border-gray-300 dark:border-slate-600 bg-white dark:bg-transparent text-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                            placeholder="z.B. Button funktioniert nicht"></div>
                     <div>
                         <label class="block text-sm font-medium">Schritte zur Reproduktion</label>
-                     <textarea name="Schritte-zur-Reproduktion" class="w-full h-28 p-3 border border-gray-300 dark:border-slate-600 bg-white dark:bg-transparent text-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500 resize-none" placeholder="Bitte beschreibe mir den Fehler..."></textarea>   
+                        <textarea name="Schritte-zur-Reproduktion"
+                            class="w-full h-28 p-3 border border-gray-300 dark:border-slate-600 bg-white dark:bg-transparent text-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500 resize-none"
+                            placeholder="Bitte beschreibe mir den Fehler..."></textarea>
                     </div>
-                    
+
                     <div class="bug-file-upload-area">
                         <div class="file-drop-zone">
-                           <div class="file-drop-zone-text">
+                            <div class="file-drop-zone-text">
                                 <i data-lucide="image-plus" class="mx-auto w-8 h-8 mb-2"></i>
                                 <span class="font-medium">Screenshot hierher ziehen</span>
                                 <p class="text-xs mt-1">oder klicken zum Auswählen</p>
@@ -285,18 +355,26 @@
                         <input type="file" name="attachment" class="hidden" accept="image/*">
                     </div>
 
-                    <div><label for="email-bug" class="block text-sm font-medium">E-Mail (optional)</label><input type="email" name="Kontakt-Email" id="email-bug" class="mt-1 w-full p-3 border border-gray-300 dark:border-slate-600 bg-white dark:bg-transparent text-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="you@example.com"></div>
-                    <div class="pt-2"><button type="submit" class="w-full flex items-center justify-center py-2.5 px-5 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 rounded-lg transition-all">Bug melden</button></div>
+                    <div><label for="email-bug" class="block text-sm font-medium">E-Mail (optional)</label><input
+                            type="email" name="Kontakt-Email" id="email-bug"
+                            class="mt-1 w-full p-3 border border-gray-300 dark:border-slate-600 bg-white dark:bg-transparent text-slate-800 dark:text-gray-200 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                            placeholder="you@example.com"></div>
+                    <div class="pt-2"><button type="submit"
+                            class="w-full flex items-center justify-center py-2.5 px-5 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 rounded-lg transition-all">Bug
+                            melden</button></div>
                 </form>
             </div>
             <div id="view-confirmation" class="p-8 text-center hidden">
-                <div class="mx-auto w-16 h-16 flex items-center justify-center bg-green-100 rounded-full mb-4"><i data-lucide="check" class="w-10 h-10 text-green-600"></i></div>
+                <div class="mx-auto w-16 h-16 flex items-center justify-center bg-green-100 rounded-full mb-4"><i
+                        data-lucide="check" class="w-10 h-10 text-green-600"></i></div>
                 <h2 class="font-display text-xl font-semibold mb-2">Vielen Dank!</h2>
                 <p>Wir haben Ihre Meldung erhalten.</p>
-                <button id="done-button" class="mt-6 w-full main-btn py-2.5 px-5 text-sm font-semibold text-white rounded-lg transition-all">Fertig</button>
+                <button id="done-button"
+                    class="mt-6 w-full main-btn py-2.5 px-5 text-sm font-semibold text-white rounded-lg transition-all">Fertig</button>
             </div>
         </div>
     </div>
     <script src="app.js"></script>
 </body>
+
 </html>

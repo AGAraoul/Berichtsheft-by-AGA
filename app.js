@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentStep: 1,
         selectedGender: null,
         days: ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag'],
-        lastInputs: [], 
+        lastInputs: [],
     };
 
     // --- DOM ELEMENTS (MAIN APP) ---
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const createBulletRow = (container, value = '', autoFocus = false) => {
         const row = document.createElement('div');
         row.className = 'flex items-center gap-2 mb-2 bullet-row-animation group'; // 'group' für Hover-Effekte
-        
+
         // NEU: Drag Handle (Griff zum Verschieben)
         const dragHandle = document.createElement('div');
         dragHandle.className = 'drag-handle cursor-grab text-gray-300 hover:text-gray-600 dark:text-gray-600 dark:hover:text-gray-300 transition-colors flex-shrink-0';
@@ -51,14 +51,14 @@ document.addEventListener('DOMContentLoaded', () => {
         // Design: Kleiner Punkt (behalten wir als visuellen Indikator)
         const bullet = document.createElement('div');
         bullet.className = 'w-1.5 h-1.5 rounded-full bg-gray-400 dark:bg-gray-500 flex-shrink-0 mt-0.5';
-        
+
         // Input Feld
         const input = document.createElement('input');
         input.type = 'text';
         input.value = value;
         input.className = 'w-full bg-transparent border-b border-gray-200 dark:border-gray-700 focus:border-green-500 dark:focus:border-green-400 outline-none py-1 transition-colors text-base text-gray-800 dark:text-gray-100 placeholder-gray-400';
         input.placeholder = 'Tätigkeit eingeben...';
-        
+
         // Event Listener für ENTER und BACKSPACE
         input.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     nextRow.querySelector('input').focus();
                 } else {
                     // Sonst: Erstelle neue Zeile
-                    createBulletRow(container, '', true); 
+                    createBulletRow(container, '', true);
                 }
             }
             // Backspace löscht leere Zeile (außer es ist die einzige)
@@ -102,15 +102,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // NEU: Erstellt die Karten mit den Listen-Inputs und initialisiert SortableJS
     const createDayInputCards = () => {
-        if (dayInputsGrid.children.length > 0) return; 
-        
+        if (dayInputsGrid.children.length > 0) return;
+
         dayInputsGrid.className = 'flex flex-col gap-6 p-4 w-full max-w-5xl mx-auto pb-32';
 
         state.days.forEach((day, index) => {
             // Karte Container
             const card = document.createElement('div');
             card.className = 'glass-card p-6 rounded-xl flex flex-col h-full border border-white/20 shadow-sm relative overflow-hidden';
-            
+
             // Header (Wochentag)
             const header = document.createElement('div');
             header.className = 'flex justify-between items-center mb-4';
@@ -121,9 +121,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const inputsContainer = document.createElement('div');
             inputsContainer.className = 'bullets-container flex-grow flex flex-col min-h-[80px]';
             inputsContainer.id = `inputs-container-${index}`;
-            
+
             // Standardmäßig 3 leere Zeilen erzeugen
-            for(let i=0; i<3; i++) {
+            for (let i = 0; i < 3; i++) {
                 createBulletRow(inputsContainer);
             }
             card.appendChild(inputsContainer);
@@ -155,11 +155,11 @@ document.addEventListener('DOMContentLoaded', () => {
             addBtn.className = 'mt-4 flex items-center gap-1 text-sm text-gray-500 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-400 transition-colors font-medium self-start focus:outline-none';
             addBtn.innerHTML = `<i data-lucide="plus" class="w-4 h-4"></i> Zeile hinzufügen`;
             addBtn.addEventListener('click', () => createBulletRow(inputsContainer, '', true));
-            
+
             card.appendChild(addBtn);
             dayInputsGrid.appendChild(card);
         });
-        
+
         // Icons neu rendern
         lucide.createIcons();
     };
@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
             step.classList.toggle('active', index + 1 === stepNumber);
         });
     };
-    
+
     async function callGeminiApi(inputs, gender, onProgress = null) {
         const functionUrl = '/.netlify/functions/generate';
         let loadingInterval;
@@ -181,9 +181,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const loadingMessages = activeDays.map(d => `Formuliere ${d}...`);
             loadingMessages.push("Finalisiere Bericht...");
             let messageIndex = 0;
-            
+
             const updateLoadingText = () => {
-                if(messageIndex < loadingMessages.length) {
+                if (messageIndex < loadingMessages.length) {
                     onProgress(loadingMessages[messageIndex]);
                     messageIndex++;
                 }
@@ -191,13 +191,13 @@ document.addEventListener('DOMContentLoaded', () => {
             updateLoadingText();
             loadingInterval = setInterval(updateLoadingText, 2000);
         }
-        
+
         try {
             const response = await fetch(functionUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    inputs: inputs, 
+                body: JSON.stringify({
+                    inputs: inputs,
                     gender: gender,
                     days: state.days
                 })
@@ -219,35 +219,35 @@ document.addEventListener('DOMContentLoaded', () => {
             throw error;
         }
     }
-    
+
     async function handleGenerate() {
         const inputs = state.days.map((_, index) => {
             const container = document.getElementById(`inputs-container-${index}`);
             if (!container) return '';
-            
+
             const rowInputs = Array.from(container.querySelectorAll('input'));
-            
+
             const dayText = rowInputs
                 .map(input => input.value.trim())
                 .filter(val => val !== '')
-                .map(val => `- ${val}`) 
+                .map(val => `- ${val}`)
                 .join('\n');
-                
+
             return dayText;
         });
 
         if (inputs.every(dayInput => dayInput === '')) {
-             showError('Bitte gebe für mindestens einen Tag eine Tätigkeit ein.'); 
-             return;
+            showError('Bitte gebe für mindestens einen Tag eine Tätigkeit ein.');
+            return;
         }
-        
-        state.lastInputs = inputs; 
+
+        state.lastInputs = inputs;
         navigateToStep(3);
-        
+
         try {
             const onProgressUpdate = (message) => { loadingStatus.textContent = message; };
             const generatedReports = await callGeminiApi(inputs, state.selectedGender, onProgressUpdate);
-            displayResults(generatedReports, inputs); 
+            displayResults(generatedReports, inputs);
             navigateToStep(4);
         } catch (error) {
             console.error("API call failed:", error);
@@ -265,9 +265,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 card.dataset.dayIndex = index;
                 card.dataset.input = originalInputs[index] || '';
                 card.style.animationDelay = `${index * 100}ms`;
-                
+
                 const sanitizedText = report.text.replace(/"/g, '&quot;');
-                
+
                 card.innerHTML = `
                     <h3 class="font-display text-xl font-bold mb-2 text-[var(--accent-color)]">${report.day}</h3>
                     <p id="report-text-${index}" class="leading-relaxed pr-24 text-gray-700 dark:text-gray-300">${report.text}</p>
@@ -291,35 +291,35 @@ document.addEventListener('DOMContentLoaded', () => {
         state.lastInputs = [];
         maleBtn.classList.remove('active');
         femaleBtn.classList.remove('active');
-        dayInputsGrid.innerHTML = ''; 
+        dayInputsGrid.innerHTML = '';
         navigateToStep(1);
     };
-    
+
     function updateCopyButton(button) {
         const textSpan = button.querySelector('.copy-text');
-        if(textSpan) textSpan.textContent = 'Kopiert!';
+        if (textSpan) textSpan.textContent = 'Kopiert!';
         button.classList.add('copied');
         setTimeout(() => {
-            if(textSpan) textSpan.textContent = 'Kopieren';
+            if (textSpan) textSpan.textContent = 'Kopieren';
             button.classList.remove('copied');
         }, 2000);
     }
 
     function fallbackCopyText(text, button) {
-         const textArea = document.createElement("textarea");
-         textArea.value = text;
-         textArea.style.position = "fixed";
-         textArea.style.left = "-9999px";
-         document.body.appendChild(textArea);
-         textArea.focus();
-         textArea.select();
-         try {
-             document.execCommand('copy');
-             updateCopyButton(button);
-         } catch (err) {
-             console.error('Fallback copy failed', err);
-         }
-         document.body.removeChild(textArea);
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-9999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            updateCopyButton(button);
+        } catch (err) {
+            console.error('Fallback copy failed', err);
+        }
+        document.body.removeChild(textArea);
     };
 
     // --- EVENT LISTENERS (MAIN APP) ---
@@ -336,11 +336,11 @@ document.addEventListener('DOMContentLoaded', () => {
         maleBtn.classList.remove('active');
         setTimeout(() => navigateToStep(2), 300);
     });
-    
+
     backToGenderBtn.addEventListener('click', () => navigateToStep(1));
     generateBtn.addEventListener('click', handleGenerate);
     resetBtn.addEventListener('click', resetApp);
-    
+
     reportOutput.addEventListener('click', async (e) => {
         const copyButton = e.target.closest('.copy-btn');
         const regenButton = e.target.closest('.regenerate-btn');
@@ -349,7 +349,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const textToCopy = copyButton.dataset.copytext;
             if (navigator.clipboard && window.isSecureContext) {
                 navigator.clipboard.writeText(textToCopy).then(() => {
-                   updateCopyButton(copyButton);
+                    updateCopyButton(copyButton);
                 }).catch(err => {
                     console.error('Modern copy failed:', err);
                     fallbackCopyText(textToCopy, copyButton);
@@ -367,7 +367,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const card = regenButton.closest('.result-card');
             const dayIndex = parseInt(card.dataset.dayIndex, 10);
             const originalInput = card.dataset.input;
-            
+
             const p = card.querySelector(`#report-text-${dayIndex}`);
             const originalTextHTML = p.innerHTML;
             p.innerHTML = `<span class="flex items-center gap-2 text-sm" style="color: var(--text-secondary);"><span class="loader-small"></span>Wird neu generiert...</span>`;
@@ -375,7 +375,7 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const inputsForApi = Array(state.days.length).fill('');
                 inputsForApi[dayIndex] = originalInput;
-                
+
                 const result = await callGeminiApi(inputsForApi, state.selectedGender);
                 const newReport = result[dayIndex];
 
@@ -388,7 +388,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             } catch (error) {
                 console.error("Regeneration failed:", error);
-                p.innerHTML = originalTextHTML; 
+                p.innerHTML = originalTextHTML;
                 showError("Regenerierung fehlgeschlagen.");
             } finally {
                 regenButton.disabled = false;
@@ -424,13 +424,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const updatesContainer = document.getElementById('updates-container');
     const closeUpdatesWidget = document.getElementById('close-updates-widget');
     const updateBadge = document.getElementById('update-new-badge');
+    const CURRENT_APP_VERSION = 'v4.1'; // Definierte Version für den Badge-Check
 
     if (updatesTriggerButton && updatesContainer) {
+        // Zeige den Badge an, wenn die Version neu ist
+        const lastSeenVersion = localStorage.getItem('lastSeenUpdateVersion');
+        if (updateBadge && lastSeenVersion !== CURRENT_APP_VERSION) {
+            updateBadge.classList.remove('hidden');
+            updateBadge.classList.add('pulsing');
+        }
+
         updatesTriggerButton.addEventListener('click', () => {
-             updatesContainer.classList.add('active');
-             updatesContainer.setAttribute('aria-hidden', 'false');
-             lucide.createIcons();
-             if(updateBadge) updateBadge.classList.add('hidden');
+            updatesContainer.classList.add('active');
+            updatesContainer.setAttribute('aria-hidden', 'false');
+            lucide.createIcons();
+
+            // Verstecke Badge und speichere besuchte Version
+            if (updateBadge) {
+                updateBadge.classList.remove('pulsing');
+                updateBadge.classList.add('hidden');
+                localStorage.setItem('lastSeenUpdateVersion', CURRENT_APP_VERSION);
+            }
         });
         closeUpdatesWidget.addEventListener('click', () => {
             updatesContainer.classList.remove('active');
@@ -443,7 +457,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Feedback System
     const feedbackTriggerButton = document.getElementById('feedback-trigger-button');
-    const feedbackContainer = document.getElementById('feedback-container'); 
+    const feedbackContainer = document.getElementById('feedback-container');
     const closeWidgetButton = document.getElementById('close-widget-button');
     const viewMain = document.getElementById('view-main');
     const viewFeedbackForm = document.getElementById('view-feedback-form');
@@ -457,31 +471,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const doneButton = document.getElementById('done-button');
 
     const openWidget = () => {
-        if(!feedbackContainer) return;
+        if (!feedbackContainer) return;
         feedbackContainer.classList.add('active');
         feedbackContainer.setAttribute('aria-hidden', 'false');
     }
     const closeWidget = () => {
-        if(!feedbackContainer) return;
-        feedbackContainer.classList.remove('active'); 
+        if (!feedbackContainer) return;
+        feedbackContainer.classList.remove('active');
         feedbackContainer.setAttribute('aria-hidden', 'true');
         setTimeout(() => {
-            if(viewMain) showView(viewMain);
-        }, 300); 
-    };
-    
-    const showView = (viewToShow) => {
-        [viewMain, viewFeedbackForm, viewBugForm, viewConfirmation].forEach(v => {
-            if(v) v.classList.add('hidden')
-        });
-        if(viewToShow) viewToShow.classList.remove('hidden');
-         lucide.createIcons();
+            if (viewMain) showView(viewMain);
+        }, 300);
     };
 
-    if(feedbackTriggerButton) feedbackTriggerButton.addEventListener('click', openWidget);
-    if(closeWidgetButton) closeWidgetButton.addEventListener('click', closeWidget);
-    if(actionGiveFeedback) actionGiveFeedback.addEventListener('click', () => showView(viewFeedbackForm));
-    if(actionReportBug) actionReportBug.addEventListener('click', () => showView(viewBugForm));
+    const showView = (viewToShow) => {
+        [viewMain, viewFeedbackForm, viewBugForm, viewConfirmation].forEach(v => {
+            if (v) v.classList.add('hidden')
+        });
+        if (viewToShow) viewToShow.classList.remove('hidden');
+        lucide.createIcons();
+    };
+
+    if (feedbackTriggerButton) feedbackTriggerButton.addEventListener('click', openWidget);
+    if (closeWidgetButton) closeWidgetButton.addEventListener('click', closeWidget);
+    if (actionGiveFeedback) actionGiveFeedback.addEventListener('click', () => showView(viewFeedbackForm));
+    if (actionReportBug) actionReportBug.addEventListener('click', () => showView(viewBugForm));
     backButtons.forEach(button => button.addEventListener('click', () => showView(viewMain)));
-    if(doneButton) doneButton.addEventListener('click', closeWidget);
+    if (doneButton) doneButton.addEventListener('click', closeWidget);
 });
